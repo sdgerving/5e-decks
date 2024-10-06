@@ -1,4 +1,109 @@
+body {
+    
+    background-color: tan; 
+    position: relative;
+}
+
+/*.parchment-image {
+    position: absolute; 
+    top: 100px;          
+    left: 0px;       
+    width: 500px;       
+    height: 500px;     
+    z-index: -1;   
+<img  alt="Parchment Image" class="parchment-image">	
+}*/
+.title{
+	
+}
+.attack-type {
+    margin: 10px 0;
+}
+
 .weaponimage {
-    width: 50px;
+    width: 50px; 
+    height: auto;
+}
+.drawbutton{
+	Position: absolute;
+	left: 150px;
+}
+.newdeck {
+    position: absolute;
+    left: 494px;
+    width: 200px;
     height: 50px;
+    background: linear-gradient(
+        to bottom, 
+        #654321 0%,  
+        #7a5230 20%,  
+        #8f6d3f 40%, 
+        #a5884d 60%,  
+        #ba9c5b 80%, 
+        #d0b069 100% 
+    );
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    text-align: center; 
+  
+    font-size: 16px;
+    cursor: pointer; 
+}
+
+.drawbutton {
+    position: absolute;
+    left: 94px;
+    width: 100px;
+    height: 50px;
+    background: linear-gradient(
+        to bottom, 
+        #654321 0%,  
+        #7a5230 20%,  
+        #8f6d3f 40%, 
+        #a5884d 60%,  
+        #ba9c5b 80%, 
+        #d0b069 100% 
+    );
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    text-align: center; 
+  
+    font-size: 16px;
+    cursor: pointer; 
+}
+@font-face {
+  font-family: TitleFont;
+  src: url(MountainKingRegular.ttf);
+}
+
+div {
+  font-family: TitleFont;
+}
+.cardsRemaining {
+    position: absolute; 
+    top: 120px;          
+    left: 495px;      
+	font-size: 40px;
+    
+}
+.cardtext {
+    position: absolute; 
+    top: 300px;          
+    left: 100px;       
+	font-size: 40px;
+    
+}
+.severity {
+    position: absolute; 
+    top: 700px;          
+    left: 100px;       
+	font-size: 40px;
+    
+}
+.cardtext {
+        
+	font-size: 40px;
+    
 }

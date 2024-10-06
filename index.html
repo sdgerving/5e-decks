@@ -3,43 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .attack-type {
-            margin: 10px 0;
-        }
-    </style>
-	<link rel="stylesheet" href="style.css">
+    <title>Fail Deck</title>
+    <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
-<button id="drawCardButton">Draw Card</button>
+<h1 class="title">Fail Deck </h1>
+    
+    
 
-<button onclick="newDeck()">Reset Deck</button>
-   
-    
-    
+    <button id="drawCardButton"class="drawbutton">Draw Card</button>
+    <button onclick="newDeck()"class="newdeck">Reset Deck</button>
+
     <div class="attack-type">
         <label>
-            <input type="radio" name="attackType" value="slashing" checked><img src="images/magic.png" alt="Slashing Image" class="weaponimage">
+            <input type="radio" name="attackType" value="slashing" checked>
+            <img src="images/slashing.png" alt="Slashing Image" class="weaponimage">
         </label>
         <label>
-            <input type="radio" name="attackType" value="piercing"> <img src="images/jeff image.png" alt="Piercing Image" class="weaponimage">
+            <input type="radio" name="attackType" value="piercing">
+            <img src="images/piercing.png" alt="Piercing Image" class="weaponimage">
         </label>
         <label>
-            <input type="radio" name="attackType" value="bludgeoning"> <img src="images/colorless symbol.png" alt="Blunt Image" class="weaponimage">
+            <input type="radio" name="attackType" value="bludgeoning">
+            <img src="images/blunt.png" alt="Blunt Image" class="weaponimage">
         </label>
         <label>
-            <input type="radio" name="attackType" value="magic"> <img src="images/tap symbol.png" alt="Magic Image" class="weaponimage">
+            <input type="radio" name="attackType" value="magic">
+            <img src="images/magic.png" alt="Magic Image" class="weaponimage">
         </label>
     </div>
 
-     <div id="deckStatus"></div>
-    <div id="result"></div><br>
-    <div id="cardsRemaining"></div>
+    <div id="deckStatus"class="DeckStatus"></div>
+    <div id="cardtext"Class="cardtext"></div><br>
+	<div id="severity"Class="severity"></div><br>
+    <div id="cardsRemaining"class="cardsRemaining"></div>
 
   <script>
     let originalDataArray = [
@@ -113,26 +110,26 @@
         const [slashing, piercing, bludgeoning, magic, severity] = dataArray[index];
         const attackType = document.querySelector('input[name="attackType"]:checked')?.value || 'slashing';
         let displayText = "";
-
+		let displayText2 = "";
         switch (attackType) {
             case "slashing":
 			displayText = `${slashing} <br><br>${severity}`;
                 break;
                 
             case "piercing":
-				displayText = ` ${slashing}<br> <br> ${severity}`;
+				displayText = ` ${piercing}<br> <br> ${severity}`;
                
                 break;
             case "bludgeoning":
-				displayText = `${slashing}<br> <br>${severity}`;
+				displayText = `${bludgeoning}<br> <br>${severity}`;
                 break;
             case "magic":
-				displayText = `${slashing} <br><br>${severity}`;
+				displayText = `${magic} <br><br>${severity}`;
                 break;
         }
 
-        document.getElementById('result').innerHTML = displayText;
-
+        document.getElementById('cardtext').innerHTML = displayText;
+		
         dataArray.splice(index, 1);
         updateCardsRemaining();
 
@@ -157,6 +154,6 @@
 	document.getElementById('drawCardButton').addEventListener('click', randomizeAndFetch);
 </script>
 
-
+</p>
 </body>
 </html>
