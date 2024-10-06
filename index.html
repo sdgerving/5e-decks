@@ -7,12 +7,10 @@
     <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
-<p class="faildecktxt">Fail Deck </p>
-    
-    
+    <p class="faildecktxt">Fail Deck </p>
 
-    <button id="drawCardButton"class="drawbutton">Draw Card</button>
-    <button onclick="newDeck()"class="newdeck">Reset Deck</button>
+    <button id="drawCardButton" class="drawbutton">Draw Card</button>
+    <button class="newdeck">Reset Deck</button>
 
     <div class="attack-type">
         <label>
@@ -33,12 +31,12 @@
         </label>
     </div>
 
-    <div id="deckStatus"class="DeckStatus"></div>
-    <div id="cardtext"Class="cardtext"></div><br>
-	<div id="severity"Class="severity"></div><br>
-    <div id="cardsRemaining"class="cardsRemaining"></div>
+    <div id="deckStatus" class="DeckStatus"></div>
+    <div id="cardtext" class="cardtext"></div><br>
+    <div id="severity" class="severity"></div><br>
+    <div id="cardsRemaining" class="cardsRemaining"></div>
 
-  <script>
+    <script>
     let originalDataArray = [
      ["Split a Seam, A piece of clothing or armor you are wearing (decided by G.O.D.)is damaged.  On everyt subsequent attack roll there is a  25% chancethat the item will split further. ", "Where The error Falls... The Projectile is flung straight upwards.  If you do not move before your next turn , you must make a DC 12 Dexterity Saving Throw.  On A failed save, take the weapon's damage. ", "Took it out of you.  Your next attack deals Minimum Damage.", "Everyone's favorite party member.  IF this attack deals necrotic damage: the last enemy you killed rises as a zombie.  It is unable to act in any way, but will mindlessly follow you for 1d4 days, after which it will collapse into a corpse again. ", "Awkward", 1],
     ["Two left feet. Your cannot take the Disengage action until the end of your next turn ", "Your stance is off.  Make a DC 12 Wisdom saving throw. On a failed save, take a 1d6 penalty to your next ranged attack roll", "Stub your tow.  You cannot make an unarmed atack on yoru next turn", "Oh my!  A CR 1/2 creature chosen randomly by the GM appears within 30ft of you.  It is hostile to everyone.", "Awkward", 2],
@@ -92,68 +90,87 @@
     ["My Bad!  Reroll this attack with advantage against an ally within 5 ft of both of you and the original target.", "Never saw it coming.  If there is an ally within 10 ft of the target: they must make a DC 18 Dexterity saving throw.  On a failed save, they are hit with this attack.  If Their back was turned this is considered a critical hit.", "So that's what that feels like.  Make a DC 18 Constitution saving throw.  On a failed save, you take this attack's normal damage.", "How'd that get there?  If this attack deals cold, fire, force lightning, or thunder based damage: and elemental (chosed by the GM) appears within 60 ft of your.  It is hostile towards only you. ", "Disgraceful", 50],
      ["Split a Seam, A piece of clothing or armor you are wearing (decided by G.O.D.)is damaged.  On everyt subsequent attack roll there is a  25% chancethat the item will split further. ", "Where The error Falls... The Projectile is flung straight upwards.  If you do not move before your next turn , you must make a DC 12 Dexterity Saving Throw.  On A failed save, take the weapon's damage. ", "Took it out of you.  Your next attack deals Minimum Damage.", "Everyone's favorite party member.  IF this attack deals necrotic damage: the last enemy you killed rises as a zombie.  It is unable to act in any way, but will mindlessly follow you for 1d4 days, after which it will collapse into a corpse again. ", "Awkward", 1]  
  ];
-	let dataArray = [...originalDataArray];
+	 let dataArray = [...originalDataArray]; // Initialize dataArray
 
-    function randomizeAndFetch() {
-        if (dataArray.length <=1) {
-            document.getElementById('deckStatus').textContent = "Deck Empty";
-            document.getElementById('drawCardButton').style.display = 'none';
-			document.getElementById('cardsRemaining').textContent = `Cards Remaining: ${dataArray.length-1}`;
-            return;
+        function randomizeAndFetch() {
+            if (dataArray.length <= 1) {
+                document.getElementById('deckStatus').textContent = "Deck Empty";
+                document.getElementById('drawCardButton').style.display = 'none';
+                document.getElementById('cardsRemaining').textContent = `Cards Remaining: ${dataArray.length - 1}`;
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * dataArray.length);
+            fetchTextForIndex(randomIndex);
         }
 
-        const randomIndex = Math.floor(Math.random() * dataArray.length );
-        fetchTextForIndex(randomIndex);
-    }
-	function fetchTextForIndex(index) {
-    if (dataArray[index]) {
-        const [slashing, piercing, bludgeoning, magic, severity] = dataArray[index];
-        const attackType = document.querySelector('input[name="attackType"]:checked')?.value || 'slashing';
-        let displayText = "";
-		let displayText2 = "";
-        switch (attackType) {
-            case "slashing":
-			displayText = `${slashing} <br><br>${severity}`;
-                break;
-                
-            case "piercing":
-				displayText = ` ${piercing}<br> <br> ${severity}`;
-               
-                break;
-            case "bludgeoning":
-				displayText = `${bludgeoning}<br> <br>${severity}`;
-                break;
-            case "magic":
-				displayText = `${magic} <br><br>${severity}`;
-                break;
+        function fetchTextForIndex(index) {
+            if (dataArray[index]) {
+                const [slashing, piercing, bludgeoning, magic, severity] = dataArray[index];
+                const attackType = document.querySelector('input[name="attackType"]:checked')?.value || 'slashing';
+                let displayText = "";
+
+                switch (attackType) {
+                    case "slashing":
+                        displayText = `${slashing} <br><br>${severity}`;
+                        break;
+                    case "piercing":
+                        displayText = `${piercing} <br><br>${severity}`;
+                        break;
+                    case "bludgeoning":
+                        displayText = `${bludgeoning} <br><br>${severity}`;
+                        break;
+                    case "magic":
+                        displayText = `${magic} <br><br>${severity}`;
+                        break;
+                }
+
+                if (displayText.split(' ').length > 15) {
+                    displayText = insertLineBreaks(displayText);
+                }
+
+                document.getElementById('cardtext').innerHTML = displayText;
+
+                dataArray.splice(index, 1);
+                updateCardsRemaining();
+
+                if (dataArray.length === 0) {
+                    document.getElementById('deckStatus').textContent = "Deck Empty";
+                    document.getElementById('drawCardButton').style.display = 'none';
+                }
+            }
         }
 
-        document.getElementById('cardtext').innerHTML = displayText;
-		
-        dataArray.splice(index, 1);
-        updateCardsRemaining();
-
-        if (dataArray.length === 0) {
-            document.getElementById('deckStatus').textContent = "Deck Empty";
-            document.getElementById('drawCardButton').style.display = 'none';
+        function insertLineBreaks(text) {
+            const words = text.split(' ');
+            let result = '';
+            for (let i = 0; i < words.length; i++) {
+                result += words[i] + ' ';
+                if ((i + 1) % 15 === 0) {
+                    result += '<br>';
+                }
+            }
+            return result.trim();
         }
-    }
-}
 
-	function updateCardsRemaining() {
-        document.getElementById('cardsRemaining').textContent = `Cards Remaining: ${dataArray.length}`;
-    }
-	function newDeck() {
-        dataArray = [...originalDataArray];
-		document.getElementById('deckStatus').textContent = ""; 
-        document.getElementById('result').textContent = ""; 
-        document.getElementById('drawCardButton').style.display = 'inline'; 
-		updateCardsRemaining();
-    }
-	updateCardsRemaining();
-	document.getElementById('drawCardButton').addEventListener('click', randomizeAndFetch);
-</script>
+        function updateCardsRemaining() {
+            document.getElementById('cardsRemaining').textContent = `Cards Remaining: ${dataArray.length}`;
+        }
 
-</p>
+        function newDeck() {
+            dataArray = [...originalDataArray]; // Reset dataArray to original
+            document.getElementById('deckStatus').textContent = ""; 
+            document.getElementById('cardtext').innerHTML = ""; 
+            document.getElementById('drawCardButton').style.display = 'inline'; 
+            updateCardsRemaining(); // Update the cards remaining display
+        }
+
+        // Set up event listeners after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCardsRemaining(); // Initial update
+            document.getElementById('drawCardButton').addEventListener('click', randomizeAndFetch); // Draw card button
+            document.querySelector('.newdeck').addEventListener('click', newDeck); // Add listener for new deck
+        });
+    </script>
 </body>
 </html>
