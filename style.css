@@ -13,9 +13,7 @@ body {
     z-index: -1;   
 <img  alt="Parchment Image" class="parchment-image">	
 }*/
-.title{
-	
-}
+
 .attack-type {
     margin: 10px 0;
 }
@@ -27,6 +25,8 @@ body {
 .drawbutton{
 	Position: absolute;
 	left: 150px;
+	top: 150px;
+	font-family: TitleFont;
 }
 .newdeck {
     position: absolute;
@@ -46,7 +46,7 @@ body {
     border: none; 
     border-radius: 5px; 
     text-align: center; 
-  
+	font-family: TitleFont;
     font-size: 16px;
     cursor: pointer; 
 }
@@ -81,18 +81,19 @@ body {
 div {
   font-family: TitleFont;
 }
+
 .cardsRemaining {
     position: absolute; 
-    top: 120px;          
-    left: 495px;      
+    top: 150px;          
+    left: 498px;      
 	font-size: 40px;
     
 }
 .cardtext {
     position: absolute; 
-    top: 300px;          
-    left: 100px;       
-	font-size: 40px;
+    top: 200px;          
+    left: 10px;       
+	font-size: 30px;
     
 }
 .severity {
@@ -102,8 +103,11 @@ div {
 	font-size: 40px;
     
 }
-.cardtext {
-        
+
+.faildecktxt{
+    position: justify; 
+	
+	right:150;
+    font-family: TitleFont;
 	font-size: 40px;
-    
 }
