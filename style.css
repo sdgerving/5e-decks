@@ -61,13 +61,13 @@ nav a {
     font-family: TitleFont;
     font-size: 16px;
     cursor: pointer;
-    width: 100px; /* Adjust width accordingly */
-    height: 50px; /* Adjust height accordingly */
-    transition: transform 0.2s ease-in-out; /* Add smooth scaling transition */
+    width: 100px;
+    height: 50px;
+    transition: transform 0.2s ease-in-out; 
     z-index: 100;
 }
 
-/* Specific positions for the buttons */
+
 .drawbutton {
     left: 170px;
     top: 150px;
@@ -76,13 +76,12 @@ nav a {
 .newdeck {
     left: 130px;
     top: 380px;
-    width: 200px; /* Adjust width for the newdeck */
-}
+    width: 200px;
 
-/* Add hover effect and shadow to match other buttons */
+
 .drawbutton:hover, .newdeck:hover {
-    transform: scale(1.1); /* Scale effect on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+    transform: scale(1.1); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
 
