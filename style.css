@@ -1,114 +1,164 @@
+
 body {
-    
-    background-color: tan; 
-    position: relative;
+    background: tan;
+    margin: 0;
+    padding: 0;
+    display: block;
 }
 
-/*.parchment-image {
+
+nav {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px; 
+    background: linear-gradient(90deg, #654321 0%, #7a5230 20%, #8f6d3f 40%, #a5884d 60%, #ba9c5b 80%, #d0b069 100%);
+    z-index: 1000; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
+}
+
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-family: TitleFont;
+}
+
+
+.parchment-image {
     position: absolute; 
-    top: 100px;          
-    left: 0px;       
-    width: 500px;       
-    height: 500px;     
-    z-index: -1;   
-<img  alt="Parchment Image" class="parchment-image">	
-}*/
+    top: 150px;  
+    left: -80px;
+    width: 800px;
+    height: 150px;
+    z-index: -1;
+}
 
 .attack-type {
-    margin: 10px 0;
+    margin: 50px 0;
+	margin-left: 55px;
 }
 
 .weaponimage {
-    width: 50px; 
+    width: 50px;
     height: auto;
 }
-.drawbutton{
-	Position: absolute;
-	left: 150px;
-	top: 150px;
-	font-family: TitleFont;
-}
-.newdeck {
+
+
+.drawbutton, .newdeck {
     position: absolute;
-    left: 10px;
-	top:380px;
-    width: 200px;
-    height: 50px;
-    background: linear-gradient(
-        to bottom, 
-        #654321 0%,  
-        #7a5230 20%,  
-        #8f6d3f 40%, 
-        #a5884d 60%,  
-        #ba9c5b 80%, 
-        #d0b069 100% 
-    );
-    color: white; 
-    border: none; 
-    border-radius: 5px; 
-    text-align: center; 
-	font-family: TitleFont;
+    background: linear-gradient(to bottom, #654321 0%, #7a5230 20%, #8f6d3f 40%, #a5884d 60%, #ba9c5b 80%, #d0b069 100%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    font-family: TitleFont;
     font-size: 16px;
-    cursor: pointer; 
+    cursor: pointer;
+    width: 100px; /* Adjust width accordingly */
+    height: 50px; /* Adjust height accordingly */
+    transition: transform 0.2s ease-in-out; /* Add smooth scaling transition */
+    z-index: 100;
 }
 
+/* Specific positions for the buttons */
 .drawbutton {
-    position: absolute;
-    left: 94px;
-    width: 100px;
-    height: 50px;
-    background: linear-gradient(
-        to bottom, 
-        #654321 0%,  
-        #7a5230 20%,  
-        #8f6d3f 40%, 
-        #a5884d 60%,  
-        #ba9c5b 80%, 
-        #d0b069 100% 
-    );
-    color: white; 
-    border: none; 
-    border-radius: 5px; 
-    text-align: center; 
-  
-    font-size: 16px;
-    cursor: pointer; 
+    left: 170px;
+    top: 150px;
 }
+
+.newdeck {
+    left: 130px;
+    top: 380px;
+    width: 200px; /* Adjust width for the newdeck */
+}
+
+/* Add hover effect and shadow to match other buttons */
+.drawbutton:hover, .newdeck:hover {
+    transform: scale(1.1); /* Scale effect on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+}
+
+
+.cardsRemaining {
+    position: absolute;
+    top: 330px;
+    left: 100px;
+    font-size: 40px;
+}
+
+.cardtext {
+    position: absolute;
+    top: 210px;
+    left: 10px;
+    font-size: 20px;
+}
+
+.severity {
+    position: absolute;
+    top: 700px;
+    left: 100px;
+    font-size: 40px;
+}
+
+
+.faildecktxt {
+    position: absolute;
+    Left: 150px;
+    font-family: TitleFont;
+    font-size: 40px;
+	
+}
+
+
+.container {
+    display: flex;
+    gap: 15px;
+}
+
+
+.btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+
+.critical {
+    background: linear-gradient(90deg, #654321 0%, #7a5230 20%, #8f6d3f 40%, #a5884d 60%, #ba9c5b 80%, #d0b069 100%);
+}
+
+
+.other {
+    background: linear-gradient(90deg, #3f2a15 0%, #52371c 20%, #674422 40%, #7c5229 60%, #925f30 80%, #a76d36 100%);
+}
+
+
+.btn:hover {
+    transform: scale(1.1);
+}
+
+
+.btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
 @font-face {
-  font-family: TitleFont;
-  src: url(MountainKingRegular.ttf);
+    font-family: TitleFont;
+    src: url(MountainKingRegular.ttf);
 }
 
 div {
-  font-family: TitleFont;
-}
-
-.cardsRemaining {
-    position: absolute; 
-    top: 330px;          
-    left: 10px;      
-	font-size: 40px;
-    
-}
-.cardtext {
-    position: absolute; 
-    top: 200px;          
-    left: 10px;       
-	font-size: 20px;
-    
-}
-.severity {
-    position: absolute; 
-    top: 700px;          
-    left: 100px;       
-	font-size: 40px;
-    
-}
-
-.faildecktxt{
-    position: justify; 
-	
-	right:150;
     font-family: TitleFont;
-	font-size: 40px;
 }
