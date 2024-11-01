@@ -98,7 +98,7 @@ body, * {
     font-size: 16px;
     cursor: pointer;
     width: 80px; 
-     
+    height: 30px;
     transition: transform 0.2s ease-in-out; 
     z-index: 100;
 }
@@ -106,8 +106,8 @@ body, * {
 
 .drawbutton {
     left: 250px;
-    top: 195px;
-    height: 30px;
+    top: 200px;
+    
 }
 
 .newdeck {
