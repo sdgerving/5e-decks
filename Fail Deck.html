@@ -22,18 +22,22 @@
         <label>
             <input class="AttackType" type="radio" name="attackType" value="slashing" checked>
             <img src="images/slashing.png" alt="Slashing Image" class="weaponimage">
+		<div id="selectedradio" class="selectedradio">Slahsing</div>
         </label>
         <label>
             <input class="AttackType" type="radio" name="attackType" value="piercing">
             <img src="images/piercing.png" alt="Piercing Image" class="weaponimage">
+		<div id="selectedradio" class="selectedradio">Piercing</div>
         </label>
         <label>
             <input class="AttackType" type="radio" name="attackType" value="bludgeoning">
             <img src="images/blunt.png" alt="Blunt Image" class="weaponimage">
+		<div id="selectedradio" class="selectedradio">Blunt</div>
         </label>
         <label>
             <input class="AttackType" type="radio" name="attackType" value="magic">
             <img src="images/magic.png" alt="Magic Image" class="weaponimage">
+		<div id="selectedradio" class="selectedradio">magic</div>
         </label>
     </div>
 
@@ -138,7 +142,7 @@ function fetchTextForIndex(index) {
 
         document.getElementById('cardtext').innerHTML = displayText;
 
-        dataArray.splice(index, 1); // Remove used entry from the array
+        dataArray.splice(index, 1);
         updateCardsRemaining();
 
         if (dataArray.length === 0) {
@@ -173,9 +177,9 @@ function fetchTextForIndex(index) {
 
         // Set up event listeners after the DOM is fully loaded
         document.addEventListener('DOMContentLoaded', () => {
-            updateCardsRemaining(); // Initial update
-            document.getElementById('drawCardButton').addEventListener('click', randomizeAndFetch); // Draw card button
-            document.querySelector('.newdeck').addEventListener('click', newDeck); // Add listener for new deck
+            updateCardsRemaining();
+            document.getElementById('drawCardButton').addEventListener('click', randomizeAndFetch); 
+            document.querySelector('.newdeck').addEventListener('click', newDeck); 
         });
     </script>
 </body>
