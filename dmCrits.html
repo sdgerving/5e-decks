@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fail Deck</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body> 
+<div class="container">
+        <a href="index.html"><button class="btn other">Home</button></a>
+		<a href="Player Critical Hit Deck.html"> <button class="btn critical">Critical Deck</button></a>
+         <a href="Fail Deck.html"><button class="btn dm">Fail Deck</button></a>
+    </div>
+	<img src="images/parchment.png" alt="Parchment Image" class="parchment-image">
+   <div class="faildecktxt">DM Critical Hit </div>
+
+    <button id="drawCardButton" class="drawbutton">Draw Card</button>
+    <button class="newdeck">Reset Deck</button>
+
+    <div class="attack-type">
+        <label>
+            <input class="AttackType" type="radio" name="attackType" value="slashing" checked>
+            <img src="images/slashing.png" alt="Slashing Image" class="weaponimage">
+        </label>
+        <label>
+            <input class="AttackType" type="radio" name="attackType" value="piercing">
+            <img src="images/piercing.png" alt="Piercing Image" class="weaponimage">
+        </label>
+        <label>
+            <input class="AttackType" type="radio" name="attackType" value="bludgeoning">
+            <img src="images/blunt.png" alt="Blunt Image" class="weaponimage">
+        </label>
+        <label>
+            <input class="AttackType" type="radio" name="attackType" value="magic">
+            <img src="images/magic.png" alt="Magic Image" class="weaponimage">
+        </label>
+    </div>
+
+    <div id="deckStatus" class="DeckStatus"></div>
+    <div id="cardtext" class="cardtext"></div><br>
+    <div id="severity" class="severity"></div><br>
+    <div id="cardsRemaining" class="cardsRemaining"></div>
+
+    <script>
+    let originalDataArray = [
+    ["Split Lip.", "Make DC 12 Constitution saving throw. On a failed save, you are unable to speak properly. Spells with a verbal component have a 25% chance of failing.", "Skewered.", "You take 1d4 damage at the start of your turn for 1d4 rounds.", "Blunt force amnesia.", "You forget the past 1d12 hours.", "Wrath of the elements.", "If this attack deals acid, cold, fire, lightning, or poison damage: it deals double damage. Other damage types deal normal damage.", "Setback", 1],
+    ["Off form.", "You have disadvantage on your next melee attack.", "Palm piercer.", "Double damage, and you are unable to cast spells with a somatic component for 1d4 rounds.", "Drop it!", "Drop what you're holding (the GM decides which hand, or determines randomly).", "Brain fog.", "You cannot take reactions for 1d4 rounds.", "Setback", 2],
+    ["Terrifying slash.", "Double damage, and make a DC 12 Wisdom saving throw. On a failed save, you become frightened of your attacker.", "Internal bleeding.", "Make DC 12 Constitution saving throw. On a failed save, take 1d4 damage at the beginning of your turn for the next 1d4 rounds.", "Knocked off balance.", "An adjacent enemy can make an attack of opportunity against you.", "Lingering weakness.", "You are vulnerable to the damage type taken from this attack for 1d4 rounds.", "Setback", 3],
+    ["Bleeder.", "Make a DC 12 Constitution saving throw. On a failed save, you take 1d4 damage at the start of your turn for 1d4 rounds.", "Pinned.", "The attack pins your foot to the ground. Make a DC 12 Strength check to free yourself, taking an additional 1d4 damage with each failed attempt.", "Hit the dirt.", "You are knocked prone.", "Cackling energy.", "Your dexterity modifier is reduced by 1 until you finish a long rest.", "Setback", 4],
+    ["Sweep the legs.", "Make a DC 12 Dexterity saving throw. On a failed save, you are knocked prone.", "A shot in the arm.", "Double damage, and you have disadvantage on Strength-based attacks for 1d4 rounds.", "This little piggy.", "Your speed is reduced by 1/2 for 1d4 rounds.", "Erode.", "Your AC is reduced by 1d4 for 1d4 rounds.", "Setback", 5],
+    ["Brutal Slash.", "Attacker rerolls any damage dice with a face value of 1 or 2 for this attack.", "Target Practice.", "Double damage, and 1 opponent within 60ft. may make an attack of opportunity against you.", "Plain and simple.", "This attack deals maximum damage.", "Life drinker.", "Double damage, and if this attack deals acid, poison, or necrotic damage: your Constitution modifier is reduced by 2 until you finish a long rest.", "Setback", 6],
+    ["Rend armor.", "Make a DC 12 Dexterity saving throw. On a failed save, if you're wearing leather or cloth armor: its effectiveness is reduced by 1.", "Open Target.", "One enemy within 5ft. of you may make an attack of opportunity against you.", "Get down!", "Double damage, and if the resulting damage is equal to or greater than 1/2 of your maximum hit points: you are knocked prone.", "Magical Barrage.", "An additional target within range is affected at 1/2 potency, or the spell's area of effect is increased by 5ft.", "Setback", 7],
+    ["Blood in the eyes.", "You are blinded until the end of your next turn.", "Not the face!", "You receive a permanent scar on your face.", "Bell-ringer.", "You are deafened until the end of your next turn.", "Distracting visions.", "Your Wisdom modifier is reduced by 1 until you finish a long rest.", "Setback", 8],
+    ["Set up.", "One enemy within 5ft. of you may make an attack of opportunity against you.", "Skewered.", "You take 1d4 damage at the beginning of your turn for the next 1d4 rounds.", "Gut punch.", "You cannot take any bonus actions for 1d4 rounds.", "Wrath of the mage.", "If this attack deals force, necrotic, psychic, radiant, or thunder damage: it deals double damage. Other damage types deal normal damage.", "Setback", 9],
+    ["Plain and simple.", "This attack deals maximum damage.", "Armor piercing strike.", "Make a DC 12 Dexterity saving throw. On a failed save, if you're wearing chain or ring armor: its effectiveness is reduced by 1.", "...And stay down.", "You are pushed back 5ft. and must make a DC 12 Dexterity saving throw. On a failed save, you are knocked prone and take 1d4 damage.", "Boom.", "Double Damage, and if this attack deals force or thunder damage: you are pushed back 1d4 x 5 ft.", "Setback", 10],
+    ["Follow up.", "Your attacker may make 1 additional attack against you.", "Funny bone.", "You have disadvantage on Dexterity-based attacks for 1d4 rounds.", "That'll buff out.", "If you're holding a shield: its effectiveness is reduced by 1.", "Whispers of doom.", "Double damage, and you take a 1d4 penalty to your attack rolls for 1d4 rounds.", "Setback", 11],
+    ["Disarmed.", "Double damage, and make a DC 12 Dexterity saving throw. On a failed save, drop your weapon.", "Pinned.", "The attack pins your arm to a wall, another target, or your own body. Make a DC 12 Strength check to free your arm, taking 1d4 damage with each failed attempt.", "Crushed hand.", "You have disadvantage on skill checks that rely on your hands or arms until you finish a short rest.", "Crackling energy.", "Your Dexterity modifier is reduced by 1 until you finish a short rest.", "Setback", 12],
+    ["Off form.", "You have disadvantage on your next melee attack.", "The thighs have it.", "Your speed is reduced by 5ft. until you finish a short rest.", "Right on the shins.", "You cannot take the Dash action for 1d4 rounds.", "Ka-boom!", "Double damage, and if this attack deals force or thunder damage: you are knocked prone.", "Setback", 13],
+    ["Disarmed.", "Double damage, and make a DC 12 Dexterity saving throw. On a failed save, drop your weapon.", "Pinned.", "The attack pins your arm to a wall, another target, or your own body. Make a DC 12 Strength check to free your arm, taking 1d4 damage with each failed attempt.", "Crushed hand.", "You have disadvantage on skill checks that rely on your hands or arms until you finish a short rest.", "Crackling energy.", "Your Dexterity modifier is reduced by 1 until you finish a short rest.", "Setback", 14],
+    ["Enraging attack.", "Double damage, and you may make an attack of opportunity against your attacker.", "Muscle piercer.", "Your next attack using a melee weapon deals 1d4 damage.", "You're not going anywhere.", "You cannot take the disengage action for 1d4 rounds.", "Life Drinker.", "If this attack deals acid, poison, or necrotic damage: your Constitution modifier is reduced by 2 until you finish a long rest.", "Setback", 15],
+    ["Split Lip.", "Make a DC 12 Constitution saving throw. On a failed save, you are unable to speak properly. Spells with a verbal component have a 25% chance of failing.", "Skewered", "You take 1d4 damage at the start of your turn for 1d4 rounds.", "Blunt force amnesia.", "You forget the last 12 hours.", "Wrath of elements.", "If this attack deals acid, cold, fire, lightning, or poison damage: it deals double damage. Other damage types deal normal damage.", "Setback", 16],
+    ["Weakening slash.", "You deal half damage on your next melee attack.", "Drop it!", "Drop what you're holding (the GM decides which hand, or determines randomly).", "Rap on the knuckles.", "Double damage, and you have disadvantage on Dexterity-based attacks for 1d4 rounds.", "I feel it in my fingers...", "If this attack deals acid, poison, or necrotic damage: your Dexterity modifier is reduced by 2 until you finish a long rest.", "Setback", 17],
+    ["Blender.", "Make a DC 12 Constitution saving throw. On a failed save, you take 1d4 damage at the start of your turn for 1d4 rounds.", "Extreme ear piercing.", "Make a DC 12 Constitution saving throw. On a failed save, a large section of one of your ears is severed.", "Right in the Kisser.", "Double damage, and you can't speak properly for 1d4 rounds. Spells with a verbal component have 50% chance of failing.", "Jumbled memories.", "Your Intelligence modifier is reduced by 1 until you finish a long rest.", "Setback", 18],
+    ["Wanna know how I got these?", "Double damage and you receive a permanent scar on your face.", "All fun and games...", "Roll a D100. On a 2 or less you are blinded in one eye.", "Stunning blow.", "Make a DC 12 Constitution saving throw. On a failed save, you are stunned until the end of your next turn.", "Say What?", "You are deafened for 1 minute.", "Setback", 19],
+    ["Bleeder", "Make a DC 12 Constitution saving throw. On a failed save, you take 1d4 damage at the start of your turn for 1d4 rounds.", "Find the joints.", "This attack deals maximum damage. Make a DC 12 Constitution saving throw. On a failed save, you lose your next attack action.", "Knocked off balance.", "Double damage, and lose 1 attack on your next turn.", "Leech life.", "Your Constitution modifier is reduced by 1 until you finish a long rest.", "Setback", 20],
+    ["Opened defenses.", "The next attack made against you has advantage.", "You missed a spot.", "You are vulnerable to piercing damage for 1d4 rounds.", "Staggered.", "Double damage, and all attacks against you have advantage until the start of your next turn.", "Spirit drain.", "The hit points lost from this attack can't be healed except by magic.", "Setback", 21],
+    ["This is going to hurt.", "You are vulnerable to slashing damage for 1d4 rounds.", "Stabbing pains.", "You deal minimum damage on all attacks for 1d4 rounds.", "Dominoes.", "You and another creature within 5 ft. of you and your attacker must make opposed Strength (Athletics) checks. The loser is knocked prone.", "Dispersal.", "Double damage, and the spell deals normal damage to a target within 5 ft. of you.", "Setback", 22],
+    ["Sliced tendon.", "Your speed is reduced by 1/2 for 1d4 rounds.", "Whose heel?", "For the next 1d4 rounds, you must make a DC 12 Constitution saving throw when attempting to move 5 ft. or more. On a failed save, you fall prone.", "Kneecapped.", "Double damage, and you have disadvantage on skill checks that rely on your legs until you finish a short rest.", "Sap strength.", "If this attack deals acid, poison, or necrotic damage: your Strength modifier is reduced by 2 until you finish a long rest.", "Setback", 23],
+    ["Wild swing.", "Any creature within 5 ft. of you and your attacker takes 1/2 the damage you took.", "Flurry.", "Double damage, and your attacker may make another attack against you with disadvantage.", "Softening blow.", "You are vulnerable to bludgeoning damage for 1d4 rounds.", "Lingering energy.", "Maximum damage, and you take 1d4 damage (of the same type as dealt by this attack) at the beginning of your turn for the next 1d4 rounds.", "Setback", 24],
+    ["Sweep the legs.", "Make a DC 14 Dexterity saving throw. On a failed save, you are knocked prone.", "The thighs have it.", "Your speed is reduced by 10 ft. until you finish a short rest.", "This little piggy...", "Triple damage, and your speed is reduced by 1/2 until you finish a short rest.", "Big boom.", "If this attack deals force or thunder damage: you are knocked back by 1d5 x 5ft., taking 1d4 bludgeoning damage for each 5ft traveled, and you are knocked prone.", "Setback", 25],
+    ["Ragged scar.", "You receive a permanent scar on your face, and you gain proficiency in Charisma (Intimidation), but lose proficiency in Charisma (Persuasion), if you had it.", "Internal Bleeding.", "Make a DC 14 Constitution saving throw. On a failed save, take 1d6 damage at the beginning of your turn for the next 1d6 rounds.", "How'd I get here?", "You forget the last 12 days.", "You are feeling sleepy...", "Triple damage, and if this attack deals psychic damage: you are knocked unconscious.", "Dangerous", 26],
+    ["Not them!", "Make a DC 14 Wisdom saving throw. On a failed save, you become frightened of creatures of your attacker's type. Repeat this save each time you face creatures of this type until you have defeated 2d12 of them.", "Staunch the bleeding.", "Triple damage, and you have disadvantage on Strength, Dexterity, and Constitution-based rolls for 1d6 rounds.", "Bonk on the noggin.", "Make a DC 14 Constitution saving throw. On a failed save, permanently lose 1 point from your Intelligence ability.", "Quiet!", "Until 2d12 days have passed, any time you attempt to speak, you shout at full volume.", "Dangerous", 27],
+    ["Sliced tendon.", "Your speed is reduced by 1/2 for 1d6 rounds.", "Whose heel?", "For the next 1d6 rounds you must make a DC 14 Constitution saving throw when attempting to move 5 ft. or more. On a failed save, you fall prone.", "Staggered.", "All attacks against you have advantage for 1d6 rounds.", "Boom.", "Triple damage, and if this attack deals force or thunder damage: you are pushed back 2d4 x 5 ft.", "Dangerous", 28],
+    ["Rend armor.", "Make a DC 14 Dexterity saving throw. On a failed save, if you're wearing leather armor: its effectiveness is reduced by 2.", "Internal bleeding.", "You take 1d6 damage at the beginning of your turn for the next 1d6 turns.", "Strike!", "Triple damage, and you are knocked into another creature within 5 ft. of you. Both of you must make a DC 14 Dexterity saving throw. On a failed save, take 1d6 bludgeoning damage.", "Lingering energy.", "Make DC 14 Constitution saving throw. On a failed save, take 1d4 damage (of the same type as dealt by this attack) at the beginning of your turn for the next 1d6 rounds.", "Dangerous", 29],
+    ["Wild swing.", "All creatures within 5 ft. of you and your attacker take the same damage you took.", "Armor piercing strike.", "Make a DC 14 Dexterity saving throw. On a failed save, if you're wearing chain or ring armor: its effectiveness is reduced by 2.", "Staggered.", "Double damage, and all attacks against you have advantage for 1d6 rounds.", "Crucible.", "Triple damage and roll a d6. On a 1-3, you are vulnerable to this damage type for 1 minute, 4 no effect, 5-6 you are resistant to this damage type for 1 minute.", "Dangerous", 30],
+    ["Off form.", "You have disadvantage on melee attacks for the next 1d6 rounds.", "Palm Piercer.", "Triple damage, and you are unable to cast spells with somatic component for 1d6 rounds.", "Drop it!", "Drop what you're holding (the GM decides which hand, or determines randomly).", "Brain fog.", "You cannot take reactions for 1d6 rounds.", "Dangerous", 31],
+    ["Disarmed", "Triple damage, and make a DC 14 Dexterity saving throw. On a failed save, drop your weapon", "Pinned", "The attack pins your arm to a wall, another target, or your own body. Make a DC 14 Strength check to free your arm, taking 1d6 damage with each failed attempt.", "Crushed hand.", "You have disadvantage on skill checks that rely on your hands or arms until you finish a long rest.", "Crackling energy.", "Your Dexterity modifier is reduced by 2 until you finish a short rest.", "Dangerous", 32],
+    ["You got off lightly. More or less.", "Triple damage, that's all. We hope you don’t die.", "All fun and games...", "Roll a d100, on a 5 or less, you are blinded in one eye.", "Stunning blow.", "Make a DC 14 Constitution saving throw. On a failed save, you are stunned until the end of your next turn.", "Say what?", "You are deafened until you take a short rest.", "Dangerous", 33],
+    ["Follow-up.", "Your attacker may make 1 additional attack against you.", "Funny bone.", "You have disadvantage on Dexterity-based attacks for 1d6 rounds.", "That'll buff out...", "If you are holding a shield: its effectiveness is reduced by 2.", "Whispers of doom.", "Double damage, and you take 1d6 penalty to your attack rolls for 1d6 rounds.", "Dangerous", 34],
+    ["Bleeder.", "Make a DC 14 Constitution saving throw. On a failed save, take 1d6 damage at the beginning of your turn for the next 1d6 rounds. Split lip. Spells with a verbal component have a 50% chance of failing until you are healed.", "Cracked skull", "Triple damage, and make a DC 14 Constitution saving throw. On a failed save, lose one of your known languages at random.", "Addled.", "You develop an accent completely different from the one you had before.", "Dangerous", 35],
+    ["Off form.", "You have disadvantage on melee attacks for 1d6 rounds.", "Something slipped.", "Triple damage, and your AC is reduced by 1d6 for 1d6 rounds.", "Right on the shins.", "You cannot take the Dash action for 1d6 rounds.", "Erode.", "Your AC is reduced by 1d6 for 1d6 rounds.", "Dangerous", 36],
+    ["Weakening slash.", "You deal 1/2 damage on melee attacks for the next 1d6 rounds.", "Drop it!", "Drop what you're holding (the GM decides which hand, or determines randomly).", "Rap on the knuckles.", "Triple Damage, and you have disadvantage on Dexterity-based attacks for 1d6 rounds.", "Sap strength.", "If this attack deals acid, poison, or necrotic damage: your Strength modifier is reduced by 4 until you finish a long rest.", "Dangerous", 37],
+    ["Make them pay.", "Triple damage, and you have advantage on your next attack against the attacker.", "Deep wound.", "Make a DC 14 Constitution saving throw. On a failed save, take an additional 1d6 piercing damage.", "...And stay down.", "You are pushed back 10 ft. Make a DC 14 Dexterity saving throw. On a failed save, you are knocked prone and take 1d6 damage.", "Magical Barrage.", "An additional target within range is affected, or the spell's area of effect is increased by 10 ft.", "Dangerous", 38],
+    ["Something slipped.", "Your AC is reduced by 1d6 for 1d6 rounds.", "Shish kebab.", "Triple damage, and if this was a melee attack: the weapon is lodged in your body.", "Crushing blow.", "Make DC 14 Dexterity saving throw. On a failed save, if you're wearing plate armor: its effectiveness is reduced by 2.", "Spirit drain.", "Double damage, and the hit points lost from this attack can't be healed except by magic.", "Dangerous", 39],
+    ["Something slipped.", "Your AC is reduced by 1d4 for 1d4 rounds.", "Distracting strike.", "Double damage, and you cannot take reactions or bonus actions until the end of your next turn.", "Crushing blow.", "Make a DC 12 Dexterity saving throw. On a failed save, if you're wearing plate armor: its effectiveness is reduced by 1.", "Lingering energy.", "Make a DC 12 Constitution saving throw. On a failed save, take 1d4 damage (of the same type as dealt by this attack) at the beginning of your turn for the next 1d4 rounds.", "Setback", 40],
+    ["Disarmed.", "Make a DC 18 Dexterity saving throw. On a successful save, drop what you're holding (the GM decides which hand, or determines randomly). On a failed save, take quadruple damage and lose the hand.", "Something slipped.", "Quadruple damage, and your AC is reduced by 1d10 for 1d10 rounds.", "Smashed hand.", "Make a DC 18 Strength saving throw. On a failed save, you are permanently unable to grasp with one of your hands (the GM decides which hand or determines randomly).", "Midas touch.", "Quadruple damage, and your hands are permanently imbued with magical energy. Every non-living thing you touch is affected as if by the damage type taken.", "Deadly", 41],
+    ["Nicked artery.", "Make a DC 18 Constitution saving throw. On a failed save, take 1d10 damage at the start of your turn for 1d10 rounds. If maximum damage is rolled: the effect continues for an additional 1d8 rounds.", "Damn this leg!", "Permanently, when entering combat, make a DC 12 Constitution saving throw. On a failed save, you have disadvantage on Strength and Dexterity-based attacks for 1d4 rounds.", "Wide open.", "All enemies within range may make an attack of opportunity against you.", "Epicenter.", "All creatures within 15 ft. of you are affected by the spell, or are affected again in the case of area of effect spells.", "Deadly", 42],
+    ["Heroic end.", "Maximum quadruple damage. If this attack kills you, all allies who can see you have advantage on their attacks for 1d10 rounds.", "Shot through the heart.", "Make a DC 18 Constitution saving throw. On a failed save, lose 1/4 of your maximum hit points at the end of your turn for 3 turns.", "Goodnight!", "Quadruple damage, and you are knocked unconscious.", "Magical barrage.", "This attack deals maximum damage, and an additional target within range is affected, or the spell's area of effect is increased by 15 ft.", "Deadly", 43],
+    ["Hideous scar.", "You receive a permanent scar on your face, giving you advantage on Charisma (Intimidation) checks, and disadvantage on Charisma (Persuasion) checks.", "Feeling faint...", "You have disadvantage on Strength, Dexterity, and Constitution-based rolls for 1d8 rounds. Additionally, you must make a DC 16 Constitution saving throw at the beginning of each of your turns. On a failed save, you fall prone.", "Out for the count.", "Quadruple damage, and make a DC 16 Constitution saving throw. On a failed save, you are knocked unconscious.", "We're all mad here...", "Quadruple damage, and if this attack deals psychic damage: you develop a form of short-term madness (see Game Master's Guide).", "Deadly", 44],
+    ["Open wound.", "For the next 1d8 rounds you must make a DC 16 Constitution saving throw when attempting to move 5ft. or more. On a failed save, you take 1d8 damage.", "Pinned.", "The attack pins your foot to the ground. Make a DC 16 Strength check to free yourself, taking an additional 1d8 damage with each failed attempt.", "Kneecapped.", "Quadruple damage, and you have disadvantage on skill checks that rely on your legs until you finish a long rest.", "Big boom.", "Quadruple damage, and if this attack deals force or thunder damage: you are knocked back 1d8 x 5 ft., taking 1d6 bludgeoning damage for each 5 ft traveled, and you are knocked prone.", "Deadly", 45],
+    ["Really took it out of you.", "The hit points lost from this attack cannot be recovered until you finish a long rest.", "Internal bleeding.", "Make DC 16 Constitution saving throw. On a failed save, take an additional 1d8 piercing damage at the beginning of your turn for the next 1d8 rounds.", "Staggered.", "Quadruple damage, and all attacks against you have advantage for 1d8 rounds.", "Lingering energy.", "Quadruple damage, and make a DC 16 Constitution saving throw. On a failed save, take 1d8 damage (of the same type as dealt by this attack) at the beginning of your turn for the next 1d8 rounds.", "Life Threatening", 46],
+    ["Weakening slash.", "You deal half damage on melee attacks for the next 1d8 rounds.", "Pinned.", "This attack pins your arm to a wall, another target, or your own body. Make DC 16 Strength check to free your arm, taking 1d8 damage with each failed attempt.", "Bad break.", "Quadruple damage, and you are unable to use your arm for 1d6+6 weeks (the GM decides which arm, or determines randomly).", "Sap strength.", "Quadruple damage, and if this attack deals acid, poison, or necrotic damage: your Strength score is permanently reduced by 1.", "Life Threatening", 47],
+    ["Off form.", "Quadruple damage, and you have disadvantage on melee attacks for the next 1d8 rounds.", "Something slipped.", "Quadruple damage, and your AC is reduced by 1d8 for 1d8 rounds.", "This little piggy.", "Your speed is reduced by 1/2 until you finish a short rest.", "Spirit drain.", "Triple damage, and the hit points lost from this attack can't be healed except by magic.", "Life Threatening", 48],
+    ["Not them!", "Quadruple damage, and make a DC 16 Wisdom saving throw. On a failed save, you become frightened of creatures of your attacker's type. Repeat this save each time you face creatures of this type until you have defeated 3d12 of them.", "Split lip.", "Quadruple damage, and spells with a verbal component have a 75% chance of failing until you are healed.", "Stunning blow.", "Make a DC 16 Constitution saving throw. On a failed save, you are stunned until the end of your next turn.", "...", "Until 2d12 days have passed, you are unable to speak.", "Life Threatening", 49],
+    ["Off form.", "Quadruple damage, and you have disadvantage on melee attacks for the next 1d8 rounds.", "Palm piercer.", "Quadruple damage, and you are unable to cast spells that rely on somatic elements or hold anything in one of your hands (the GM decides which hand, or determines randomly) until you finish a short rest.", "Mangler.", "Make a DC 16 Constitution saving throw. On a failed save, your Dexterity score is permanently reduced by 1.", "Lingering energy.", "Make a DC 16 Constitution saving throw. On a failed save, take 1d8 damage (of the same type as dealt by this attack) at the beginning of your turn for the next 1d8 rounds.", "Life Threatening", 50]
+];
+
+	 let dataArray = [...originalDataArray]; // Initialize dataArray
+
+function randomizeAndFetch() {
+    if (dataArray.length <= 1) {
+        document.getElementById('deckStatus').textContent = "Deck Empty";
+        document.getElementById('drawCardButton').style.display = 'none';
+        document.getElementById('cardsRemaining').textContent = `Cards Remaining: ${dataArray.length - 1}`;
+        return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * dataArray.length);
+    fetchTextForIndex(randomIndex);
+}
+
+function fetchTextForIndex(index) {
+    if (dataArray[index]) {
+        const [redslash, slashing, redpierce, piercing, redbludg, bludgeoning, redmagic, magic, severity,cdnum] = dataArray[index];
+        const attackType = document.querySelector('input[name="attackType"]:checked')?.value || 'slashing';
+        let displayText = "";
+
+        switch (attackType) {
+            case "slashing":
+                displayText = `<span style="color:#D22B2B">${redslash}</span>  ${slashing} <br><br>Severity: ${severity}<br><br>Card Number: ${cdnum}`;
+                break;
+            case "piercing":
+                displayText = `<span style="color:#D22B2B;">${redpierce}</span>  ${piercing} <br><br>Severity: ${severity}<br><br>Card Number: ${cdnum}`;
+                break;
+            case "bludgeoning":
+                displayText = `<span style="color:#D22B2B;">${redbludg}</span>  ${bludgeoning} <br><br>Severity: ${severity}<br><br>Card Number: ${cdnum}`;
+                break;
+            case "magic":
+                displayText = `<span style="color:#D22B2B;">${redmagic}</span>  ${magic} <br><br>Severity: ${severity}<br><br>Card Number: ${cdnum}`;
+                break;
+        }
+
+        if (displayText.split(' ').length > 12) {
+            displayText = insertLineBreaks(displayText);
+        }
+
+        document.getElementById('cardtext').innerHTML = displayText;
+
+        dataArray.splice(index, 1); // Remove used entry from the array
+        updateCardsRemaining();
+
+        if (dataArray.length === 0) {
+            document.getElementById('deckStatus').textContent = "Deck Empty";
+            document.getElementById('drawCardButton').style.display = 'none';
+        }
+    }
+}
+        function insertLineBreaks(text) {
+            const words = text.split(' ');
+            let result = '';
+            for (let i = 0; i < words.length; i++) {
+                result += words[i] + ' ';
+                if ((i + 1) % 12 === 0) {
+                    result += '<br>';
+                }
+            }
+            return result.trim();
+        }
+
+        function updateCardsRemaining() {
+            document.getElementById('cardsRemaining').textContent = `Cards Remaining: ${dataArray.length}`;
+        }
+
+        function newDeck() {
+            dataArray = [...originalDataArray]; // Reset dataArray to original
+            document.getElementById('deckStatus').textContent = ""; 
+            document.getElementById('cardtext').innerHTML = ""; 
+            document.getElementById('drawCardButton').style.display = 'inline'; 
+            updateCardsRemaining(); // Update the cards remaining display
+        }
+
+        // Set up event listeners after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCardsRemaining(); // Initial update
+            document.getElementById('drawCardButton').addEventListener('click', randomizeAndFetch); // Draw card button
+            document.querySelector('.newdeck').addEventListener('click', newDeck); // Add listener for new deck
+        });
+    </script>
+</body>
+</html>

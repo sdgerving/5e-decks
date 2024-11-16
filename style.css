@@ -19,7 +19,6 @@ body {
 
 .attack-type label:hover {
     transform: scale(1.5);
-	z-index: 105;
 }
 
 .attack-type input[type="radio"] {
@@ -97,8 +96,8 @@ body, * {
     font-family: TitleFont;
     font-size: 16px;
     cursor: pointer;
-    width: 80px; 
-
+    width: 100px; 
+    height: 50px; 
     transition: transform 0.2s ease-in-out; 
     z-index: 100;
 }
@@ -106,15 +105,13 @@ body, * {
 
 .drawbutton {
     left: 250px;
-    top: 160px;
-    
+    top: 150px;
 }
 
 .newdeck {
     left: 200px;
     top: 480px;
     width: 200px; 
-    height: 50px;
 }
 
 
@@ -180,7 +177,7 @@ body, * {
 }
 
 
-.critical {
+.critical, .other, .dm {
     background: linear-gradient(90deg, #654321 0%, #7a5230 20%, #8f6d3f 40%, #a5884d 60%, #ba9c5b 80%, #d0b069 100%);
 }
 

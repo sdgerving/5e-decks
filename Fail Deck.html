@@ -10,7 +10,7 @@
 <div class="container">
         <a href="index.html"><button class="btn other">Home</button>
 		<a href="Player Critical Hit Deck.html"> <button class="btn critical">Critical Deck</button></a>
-        <button class="btn other">Other Deck 2</button>
+        <a href="dmCrits.html"><button class="btn dm">DM Critical Deck</button></a>
     </div>
 	<img src="images/parchment.png" alt="Parchment Image" class="parchment-image">
    <div class="faildecktxt">Fail Deck </div>
@@ -22,22 +22,18 @@
         <label>
             <input class="AttackType" type="radio" name="attackType" value="slashing" checked>
             <img src="images/slashing.png" alt="Slashing Image" class="weaponimage">
-		<div id="selectedradio" class="selectedradio">Slahsing</div>
         </label>
         <label>
             <input class="AttackType" type="radio" name="attackType" value="piercing">
             <img src="images/piercing.png" alt="Piercing Image" class="weaponimage">
-		<div id="selectedradio" class="selectedradio">Piercing</div>
         </label>
         <label>
             <input class="AttackType" type="radio" name="attackType" value="bludgeoning">
             <img src="images/blunt.png" alt="Blunt Image" class="weaponimage">
-		<div id="selectedradio" class="selectedradio">&nbspBlunt</div>
         </label>
         <label>
             <input class="AttackType" type="radio" name="attackType" value="magic">
             <img src="images/magic.png" alt="Magic Image" class="weaponimage">
-		<div id="selectedradio" class="selectedradio">&nbsp&nbspmagic</div>
         </label>
     </div>
 
@@ -142,7 +138,7 @@ function fetchTextForIndex(index) {
 
         document.getElementById('cardtext').innerHTML = displayText;
 
-        dataArray.splice(index, 1);
+        dataArray.splice(index, 1); // Remove used entry from the array
         updateCardsRemaining();
 
         if (dataArray.length === 0) {
@@ -177,9 +173,9 @@ function fetchTextForIndex(index) {
 
         // Set up event listeners after the DOM is fully loaded
         document.addEventListener('DOMContentLoaded', () => {
-            updateCardsRemaining();
-            document.getElementById('drawCardButton').addEventListener('click', randomizeAndFetch); 
-            document.querySelector('.newdeck').addEventListener('click', newDeck); 
+            updateCardsRemaining(); // Initial update
+            document.getElementById('drawCardButton').addEventListener('click', randomizeAndFetch); // Draw card button
+            document.querySelector('.newdeck').addEventListener('click', newDeck); // Add listener for new deck
         });
     </script>
 </body>
