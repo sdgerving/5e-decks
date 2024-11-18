@@ -1,0 +1,291 @@
+/* General Styles */
+body {
+    font-family: 'Bangers', Arial, sans-serif;
+    background-color: #1c3b5a; /* Marvel blue */
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    font-size: 20px; /* Increased base font size */
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: #ff1a1a; /* Bold red */
+    padding: 10px 0;
+    width: 100%;
+    text-align: center;
+    font-size: 30px; /* Increased font size */
+}
+
+.navbar ul {
+    display: flex;
+    list-style-type: none;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    color: #ffd700; /* Gold */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Logo Image */
+.logo-image {
+    max-width: 600px;
+    margin: 20px 0;
+}
+
+/* Button Container */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between buttons */
+    margin-top: 20px; /* Space below the logo */
+}
+
+/* Buttons Styling */
+.side-button {
+    background-color: #ff1a1a; /* Red background */
+    color: #ffd700; /* Yellow text */
+    border: 3px solid #002366; /* Blue outline */
+    font-size: 24px; /* Large font */
+    padding: 15px 30px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-family: 'Bangers', Arial, sans-serif; /* Marvel-style font */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Button Hover Effect */
+.side-button:hover {
+    background-color: #e60000; /* Darker red on hover */
+    transform: scale(1.1); /* Make button 10% larger on hover */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4); /* Drop shadow on hover */
+}
+
+/* Container for main content */
+.container {
+    width: 800px;
+    border: 3px solid #c0c0c0; /* Silver border */
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Top Row Flex Layout */
+.top-row {
+    display: flex;
+    gap: 20px; /* Space between character information and resources */
+    width: 100%;
+}
+
+/* Section Title Styling */
+.section-title {
+    font-size: 30px; /* Large font size */
+    color: #ffffff; /* White text */
+    background-color: #ff1a1a; /* Bold red */
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 5px;
+    margin-bottom: 15px;
+    display: inline-block;
+    border: 4px solid #002366; /* Dark blue border */
+    border-radius: 4px;
+}
+
+/* Section Content Styling */
+.section {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border: 2px solid #ff1a1a; /* Bold red border */
+    width: 100%;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.section p, .section ul {
+    color: #002366; /* Dark blue text */
+    font-weight: bold;
+    font-size: 20px; /* Increased font size */
+}
+
+/* Styling for Input Fields */
+.input-field {
+    font-size: 16px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 10px;
+    width: 60%;
+}
+/* Container for attributes and definition */
+.section-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Attributes Section */
+#attributes {
+    width: 50%;
+	
+}
+
+/* Definition Section */
+.definition {
+    display: flex;
+    align-items: flex-start;
+    width: 50%;
+    padding-left: 200px; /* Blank space */
+}
+
+#definition-content {
+    width: calc(100% - 200px); /* Accommodate blank space */
+    max-width: 600px; /* Control line length */
+    margin-left: -240px; /* Start definition 100px to the left */
+}
+
+#definition-text {
+    font-size: 24px; /* Larger font size */
+    line-height: 1.8; /* Increase line spacing for readability */
+    color: #ff1a1a;
+    font-weight: normal;
+    text-align: left;
+    word-break: break-word; /* Allow natural line breaks */
+    overflow-wrap: break-word; /* Ensure long words break nicely */
+}
+.rank-red {
+    color: #ff1a1a; /* Red color for rank */
+    font-weight: bold;
+}
+#attributes p {
+    font-size: 20px; /* Sets font size for attributes */
+}
+
+#attributes .rank-info {
+    font-size: 20px; /* Ensures rank and rank name display in the same size */
+    color: #ff1a1a; /* Red color for rank info */
+}
+/* General Styles for Health and Karma in Resources Section */
+#health-total,
+#karma-total {
+    font-size: 35px; /* Label font size */
+	color: red;
+}
+
+#health-total .value,
+#karma-total .value {
+    color: red; /* Color of the value */
+    font-size: 35px;
+}
+
+/* Styling for Attribute Rank Names and Numbers */
+.attribute-rank {
+    font-size: 35px; /* Rank name and number font size */
+    color: #ff1a1a; /* Red color for rank name and number */
+}
+
+/* General Styles for Race and Sub Race */
+#race,
+#subRace {
+    font-size: 30px; /* Match font size to Health and Karma */
+}
+
+#race .value,
+#subRace .value {
+    color: red; /* Color to match Health and Karma values */
+    font-size:35px;
+}/* Styles for Race and Sub Race labels */
+#character-info p strong {
+    font-size: 30px; /* Set font size to 30px */
+}
+
+/* Set font size for strong labels in the Resources section */
+.resources p strong {
+    font-size: 30px;
+    color: #002366; /* Keep color as desired, or change if necessary */
+}
+/* Set color to red for Physical form and Sub form */
+#race, #subRace {
+    color: red;
+}
+/* Power list styling */
+#powers-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Power list styling */
+#powers-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Power list styling */
+#powers-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Power list styling */
+#powers-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.power-item {
+    position: relative;
+    cursor: pointer;
+    padding: 10px;
+    background-color: #f0f0f0;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+/* Tooltip styling (popup) */
+.tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: yellow;  /* Yellow background for the tooltip */
+    color: blue;  /* Bright blue text */
+    font-size: 25px;  /* Set description text size to 25px */
+    padding: 10px;
+    border: 2px solid red;  /* Red border with 2px thickness */
+    border-radius: 5px;
+    visibility: hidden;  /* Hidden by default */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    max-width: 500px;
+    z-index: 1000;
+    white-space: normal; /* Allow text to wrap */
+    word-wrap: break-word; /* Break long words onto the next line */
+}
+
+/* Show tooltip on hover */
+.power-item:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.power-item:hover {
+    background-color: #e0e0e0;  /* Highlight when hovering */
+}
+S
