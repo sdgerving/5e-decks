@@ -11,11 +11,11 @@
     <!-- Navigation Bar -->
     <div class="navbar">
         <ul>
-            <a href="index.html"><button class="btn other">Home</button>
-		<a href="Player Critical Hit Deck.html"> <button class="btn critical">Critical Deck</button></a>
-        <a href="dmCrits.html"><button class="btn dm">DM Critical Deck</button></a>
-		<a href="Fail Deck.html"><button class="btn dm">Fail Deck</button></a>
-		<a href="mpoc.html"><button class="">One Power</button></a>
+            <a href="index.html"><button class="btn other">Home</button></a>
+            <a href="Player Critical Hit Deck.html"><button class="btn critical">Critical Deck</button></a>
+            <a href="dmCrits.html"><button class="btn dm">DM Critical Deck</button></a>
+            <a href="Fail Deck.html"><button class="btn dm">Fail Deck</button></a>
+			<a href="marvelIndex.html"><button class="btn dm">Marvel</button></a>
         </ul>
     </div>
 
@@ -24,1092 +24,54 @@
 
     <!-- Button Container -->
     <div class="button-container" id="button-container">
-        <button class="side-button" id="roll-character" onclick="rollCharacter(),rollForPowersTalentsContacts()">Roll Character</button>
-        <button class="side-button" id="type-character" onclick="enableEditing()">Type Character</button>
+        <button class="side-button" id="roll-power" onclick="rollRandomPower()">Roll Power</button>
     </div>
 
     <!-- Main Content Container -->
     <div class="container">
-        <div class="top-row">
-            <div class="section character-info" id="character-info">
-                <div class="section-title">Character Information</div>
-                <p><strong>Player Name:</strong> </p>
-                <p><strong>Hero Name:</strong> </p>
-                <p><strong>Real Name:</strong> </p>
-                <p><strong>Race:</strong> <span id="race"></span></p>
-                <p><strong>Sub Race:</strong> <span id="subRace"></span></p>
-            </div>
-
-            <div class="section resources" id="resources">
-    <div class="section-title">Resources</div>
-    <p><strong>Health:</strong> <span id="health-value"></span></p>
-    <p><strong>Karma:</strong> <span id="karma-value"></span></p>
-    <p><strong>Popularity:</strong> <span id="popularity-value"></span></p>
-    <p><strong>Resources:</strong> <span id="resources-value"></span></p>
-    <p><strong>Karma Pool:</strong> <span id="karma-pool-value"></span></p>
-</div>
-
-
+        <div class="section" id="powers">
+            <div class="section-title">Random Power</div>
+            <p id="power-name"><strong>Power Name:</strong> </p>
+            <p id="power-description"><strong>Description:</strong> </p>
+            <p id="power-rank"><strong>Rank:</strong> </p>
         </div>
-
-       
-<div class="section-container">
-    <div class="section" id="attributes">
-        <div class="section-title">Attributes</div>
-        <p><strong>Fighting:</strong> <span id="fighting-roll"></span> <span id="fighting-rank"></span> <span id="fighting-rank-name"></span></p>
-        <p><strong>Agility:</strong> <span id="agility-roll"></span> <span id="agility-rank"></span> <span id="agility-rank-name"></span></p>
-        <p><strong>Strength:</strong> <span id="strength-roll"></span> <span id="strength-rank"></span> <span id="strength-rank-name"></span></p>
-        <p><strong>Endurance:</strong> <span id="endurance-roll"></span> <span id="endurance-rank"></span> <span id="endurance-rank-name"></span></p>
-        <p><strong>Reason:</strong> <span id="reason-roll"></span> <span id="reason-rank"></span> <span id="reason-rank-name"></span></p>
-        <p><strong>Intuition:</strong> <span id="intuition-roll"></span> <span id="intuition-rank"></span> <span id="intuition-rank-name"></span></p>
-        <p><strong>Psyche:</strong> <span id="psyche-roll"></span> <span id="psyche-rank"></span> <span id="psyche-rank-name"></span></p>
-    </div>
-
-    <div class="section definition" id="definition-section">
-        <div style="width: 50px;"></div> <!-- Blank space of 200px -->
-        <div id="definition-content"></div>
-			<p id="definition-text"></p><!-- Placeholder for the Definition text -->
-    </div>
-</div>
-      <div class="section" id="powers">
-        <div class="section-title">Powers</div>
-        <p id="powers-count">Powers: </p>
-        <ul id="powers-list"></ul>
-    </div>
-
-    <div class="section" id="talents">
-        <div class="section-title">Talents</div>
-        <p id="talents-count">Talents: </p>
-    </div>
-
-    <div class="section" id="contacts">
-        <div class="section-title">Contacts</div>
-        <p id="contacts-count">Contacts: </p>
-    </div>
-
     </div>
 
     <script>
-	
+       
 
-function rollCharacter() {
-    console.log("Roll Character button clicked.");
-    
-    document.getElementById("type-character").style.display = "none";
-
-    const raceRoll = Math.floor(Math.random() * 100) + 1;
-    console.log("Race roll:", raceRoll);
-
-    const raceEntry = raceData.find(entry => {
-        if (!entry.range) return false;
-        const ranges = entry.range.split(",").map(Number);
-        return ranges.includes(raceRoll);
-    });
-
-    if (raceEntry) {
-        console.log("Race entry found:", raceEntry);
-        document.getElementById("race").innerText = raceEntry["Physical form"];
-        document.getElementById("subRace").innerText = raceEntry["Sub Form"] || "None";
-
-        const definition = raceEntry["Definition"] || "";
-        const words = definition.split(" ");
-        let formattedText = "";
-
-        for (let i = 0; i < words.length; i += 5) {
-            formattedText += words.slice(i, i + 5).join(" ") + "<br>";
-        }
-        document.getElementById("definition-text").innerHTML = formattedText.trim();
-
-        const columnKey = `column${raceEntry.column}`;
-        const attributes = ["fighting", "agility", "strength", "endurance", "reason", "intuition", "psyche"];
         
-        let healthTotal = 0;
-        let karmaTotal = 0;
+        function rollRandomPower() {
+            const powerList = PowerCategories.EnergyEmission; // Example: Using EnergyEmission as the category
+            const roll = Math.floor(Math.random() * 100) + 1;
 
-        attributes.forEach(attribute => {
-            const attributeRoll = Math.floor(Math.random() * 100) + 1;
-            const rankInfo = marvelRank.columns[columnKey].find(rank => {
-                const [min, max] = rank.range.split("-").map(Number);
-                return attributeRoll >= min && attributeRoll <= max;
+            // Find the power that matches the roll
+            const power = powerList.find(p => {
+                const [min, max] = p.DieRoll.split('-').map(Number);
+                return roll >= min && roll <= max;
             });
 
-            if (rankInfo) {
-                document.getElementById(`${attribute}-roll`).innerText = `Roll: ${attributeRoll}`;
-                document.getElementById(`${attribute}-rank-name`).innerHTML = 
-                    `<span style="font-size: 30px; color: #ff1a1a;">${rankInfo.rank_name} (${rankInfo.rank})</span>`;
-
-                if (["fighting", "agility", "strength", "endurance"].includes(attribute)) {
-                    healthTotal += rankInfo.rank;
-                } else if (["reason", "intuition", "psyche"].includes(attribute)) {
-                    karmaTotal += rankInfo.rank;
-                }
-            } else {
-                console.error(`No rank info found for roll: ${attributeRoll} in ${columnKey}`);
-            }
-        });
-
-        // Display the calculated health and karma totals in the resources section
-        document.getElementById("health-value").innerHTML = 
-            `<span style="font-size: 35px;"></span> <span style="color: Red; font-size: 35px;">${healthTotal}</span>`;
-        document.getElementById("karma-value").innerHTML = 
-            `<span style="font-size: 35px;"></span> <span style="color:red ; font-size: 35px;">${karmaTotal}</span>`;
-
-    } else {
-        console.error(`No race found for roll: ${raceRoll}`);
-    }
-}
-	function rollForPowersTalentsContacts() {
-    try {
-        const powerGenRoll = Math.floor(Math.random() * 100) + 1;
-        let powers, talents, contacts;
-
-        // Assign values based on the powerGenRoll range
-        if (powerGenRoll <= 12) { powers = 1; talents = 1; contacts = 1; }
-        else if (powerGenRoll <= 26) { powers = 2; talents = 1; contacts = 1; }
-        else if (powerGenRoll <= 41) { powers = 3; talents = 1; contacts = 1; }
-        else if (powerGenRoll <= 55) { powers = 4; talents = 2; contacts = 2; }
-        else if (powerGenRoll <= 66) { powers = 5; talents = 2; contacts = 2; }
-        else if (powerGenRoll <= 75) { powers = 2; talents = 2; contacts = 3; }
-        else if (powerGenRoll <= 83) { powers = 7; talents = 3; contacts = 3; }
-        else if (powerGenRoll <= 89) { powers = 8; talents = 3; contacts = 3; }
-        else if (powerGenRoll <= 94) { powers = 9; talents = 4; contacts = 4; }
-        else if (powerGenRoll <= 97) { powers = 10; talents = 4; contacts = 4; }
-        else if (powerGenRoll <= 99) { powers = 12; talents = 5; contacts = 5; }
-        else { powers = 14; talents = 6; contacts = 6; }
-
-        // Display the results on the page
-        document.getElementById("powers-count").textContent = `Powers: Roll: ${powerGenRoll} -Total Powers: ${powers}`;
-        document.getElementById("talents-count").textContent = `Talents: ${talents}`;
-        document.getElementById("contacts-count").textContent = `Contacts: ${contacts}`;
-
-        // Roll powers
-        rollPowerClasses(powers);
-    } catch (error) {
-        console.error("Error in rollForPowersTalentsContacts:", error);
-    }
-}
-
-function rollPowerClasses(powers) {
-    try {
-        const powerList = document.getElementById("powers-list");
-        powerList.innerHTML = ""; // Clear previous list
-
-        const powerClassCategories = [
-            { range: [1, 5], class: "Defensive" },
-            { range: [6, 11], class: "Detection" },
-            { range: [12, 16], class: "EnergyControl" },
-            { range: [17, 24], class: "EnergyEmission" },
-            { range: [25, 29], class: "Fighting" },
-            { range: [30, 31], class: "Illusionary" },
-            { range: [32, 35], class: "LifeformControl" },
-            { range: [36, 40], class: "Magic" },
-            { range: [41, 47], class: "MatterControl" },
-            { range: [48, 53], class: "MatterConversion" },
-            { range: [54, 57], class: "MatterCreation" },
-            { range: [58, 71], class: "MentalEnhancement" },
-            { range: [72, 85], class: "PhysicalEnhancement" },
-            { range: [86, 88], class: "PowerControl" },
-            { range: [89, 92], class: "SelfAlteration" },
-            { range: [93, 100], class: "Travel" }
-        ];
-
-        // Assuming `columnKey` is already determined from the race entry
-        const columnKey = "column1";  // Example: update with the actual columnKey dynamically
-
-        for (let i = 0; i < powers; i++) {
-            const roll = Math.floor(Math.random() * 100) + 1;
-            const category = powerClassCategories.find(cat => roll >= cat.range[0] && roll <= cat.range[1]);
-
-            if (category) {
-                // Validate the existence of category powers
-                if (!PowerCategories[category.class]) {
-                    console.error(`No powers found for category: ${category.class}`);
-                    continue;
-                }
-
-                const selectedPower = getRandomPowerFromCategory(PowerCategories[category.class]);
-
-                if (!selectedPower) {
-                    console.error(`No valid power selected from category: ${category.class}`);
-                    continue;
-                }
-
-                // Roll for Marvel Rank based on the selected columnKey
-                const attributeRoll = Math.floor(Math.random() * 100) + 1;
-                const rankInfo = marvelRank.columns[columnKey].find(rank => {
-                    const [min, max] = rank.range.split("-").map(Number);
-                    return attributeRoll >= min && attributeRoll <= max;
+            if (power) {
+                // Roll for the rank
+                const rankRoll = Math.floor(Math.random() * 100) + 1;
+                const rank = marvelRank.columns.column1.find(r => {
+                    const [min, max] = r.range.split('-').map(Number);
+                    return rankRoll >= min && rankRoll <= max;
                 });
 
-                // If a valid rank is found, format the output
-                if (rankInfo) {
-                    const marvelRankText = `${rankInfo.rank_name} (${rankInfo.rank})`;
-
-                    // Create the list item for the power
-                    const li = document.createElement("li");
-                    li.classList.add('power-item'); // Add the class to be used for hover effect
-                    li.innerHTML = `
-                        <span style="font-size: 24px; font-weight: bold; color: #ff1a1a;">${selectedPower.Category}</span> - 
-                        <span style="font-size: 24px; font-weight: bold; color: blue;">${marvelRankText}</span>
-                    `;
-                    
-                    // Add the description as a tooltip (hidden by default)
-                    const tooltip = document.createElement('div');
-                    tooltip.classList.add('tooltip');
-                    tooltip.textContent = selectedPower.Description;
-                    li.appendChild(tooltip);
-
-                    // Add the power item to the list
-                    powerList.appendChild(li);
-
-                    // Hover functionality to show the tooltip
-                    li.addEventListener('mouseenter', () => {
-                        tooltip.style.visibility = 'visible';
-                        tooltip.style.opacity = 1;
-                    });
-
-                    li.addEventListener('mouseleave', () => {
-                        tooltip.style.visibility = 'hidden';
-                        tooltip.style.opacity = 0;
-                    });
+                // Update the UI with power and rank information
+                document.getElementById("power-name").innerHTML = `<strong>Power Name:</strong> ${power.Category}`;
+                document.getElementById("power-description").innerHTML = `<strong>Description:</strong> ${power.Description}`;
+                if (rank) {
+                    document.getElementById("power-rank").innerHTML = `<strong>Rank:</strong> ${rank.rank_name} (${rank.rank})`;
                 } else {
-                    console.error(`No rank found for roll: ${attributeRoll} in ${columnKey}`);
+                    document.getElementById("power-rank").innerHTML = `<strong>Rank:</strong> Unknown`;
                 }
             } else {
-                console.error(`No category found for roll: ${roll}`);
+                alert("No power found for this roll!");
             }
         }
-    } catch (error) {
-        console.error("Error in rollPowerClasses:", error);
-    }
-}
-
-
-
-
-	function getRandomPowerFromCategory(categoryPowers) {
-    try {
-        const roll = Math.floor(Math.random() * 100) + 1;  // Roll between 1 and 100
-
-        // Check if categoryPowers is valid
-        if (!Array.isArray(categoryPowers) || categoryPowers.length === 0) {
-            throw new Error("Invalid category powers.");
-        }
-
-        console.log(`Rolling for power: ${roll}`);
-
-        // Find a matching power from the category
-        const power = categoryPowers.find(power => {
-            // Check if DieRoll is a range or a single value
-            let min, max;
-            const dieRollParts = power.DieRoll.split('-');
-
-            // If it's a single value, treat it as a range [value, value]
-            if (dieRollParts.length === 1) {
-                min = max = parseInt(dieRollParts[0], 10);
-            } else if (dieRollParts.length === 2) {
-                min = parseInt(dieRollParts[0], 10);
-                max = parseInt(dieRollParts[1], 10);
-            } else {
-                console.error(`Invalid DieRoll range format: ${power.DieRoll}`);
-                return false;
-            }
-
-            // Validate that min and max are valid numbers
-            if (isNaN(min) || isNaN(max)) {
-                console.error(`Invalid DieRoll range: ${power.DieRoll}`);
-                return false;
-            }
-
-            console.log(`Checking power: ${power.Description} with DieRoll range: [${min}, ${max}]`);
-
-            // Return true if the roll falls within the range, inclusive
-            return roll >= min && roll <= max;
-        });
-
-        if (!power) {
-            console.error(`No valid power selected for roll ${roll} in category ${categoryPowers[0].Category}`);
-        }
-
-        return power || null;
-    } catch (error) {
-        console.error("Error in getRandomPowerFromCategory:", error);
-        return null;
-    }
-}
-	
-
-
-
-
-
-function enableEditing() {
-    addInputFields("character-info");
-    addInputFields("resources");
-    addInputFields("attributes");
-    addInputFields("powers");
-    addInputFields("talents");
-    addInputFields("contacts");
-
-    document.getElementById("roll-character").style.display = "none";
-    document.getElementById("type-character").style.display = "none";
-
-    document.getElementById("button-container").innerHTML = '<button class="side-button" onclick="saveCharacter()">Save Character</button>';
-}
-
-function addInputFields(sectionId) {
-    const section = document.getElementById(sectionId);
-    const elements = section.querySelectorAll("p, li");
-
-    elements.forEach(element => {
-        const text = element.innerText;
-        const input = document.createElement("input");
-        input.type = "text";
-        input.value = text;
-        input.classList.add("input-field");
-        element.appendChild(input);
-        element.style.display = "flex";
-        element.style.justifyContent = "space-between";
-    });
-}
-
-function saveCharacter() {
-    alert("Character saved!");
-}
-  const marvelRank = {
-    columns: {
-        column1: [
-            { range: "01-05", rank: 2, rank_name: "Feeble" },
-            { range: "06-10", rank: 4, rank_name: "Poor" },
-            { range: "11-20", rank: 6, rank_name: "Typical" },
-            { range: "21-40", rank: 10, rank_name: "Good" },
-            { range: "41-60", rank: 20, rank_name: "Excellent" },
-            { range: "61-80", rank: 30, rank_name: "Remarkable" },
-            { range: "81-96", rank: 40, rank_name: "Incredible" },
-            { range: "97-100", rank: 50, rank_name: "Amazing" }
-        ],
-        column2: [
-            { range: "01-05", rank: 2, rank_name: "Feeble" },
-            { range: "06-25", rank: 4, rank_name: "Poor" },
-            { range: "26-75", rank: 6, rank_name: "Typical" },
-            { range: "78-95", rank: 10, rank_name: "Good" },
-            { range: "96-100", rank: 20, rank_name: "Excellent" }
-        ],
-        column3: [
-            { range: "01-05", rank: 2, rank_name: "Feeble" },
-            { range: "06-10", rank: 4, rank_name: "Poor" },
-            { range: "11-40", rank: 6, rank_name: "Typical" },
-            { range: "41-80", rank: 10, rank_name: "Good" },
-            { range: "81-95", rank: 20, rank_name: "Excellent" },
-            { range: "96-100", rank: 30, rank_name: "Remarkable" }
-        ],
-        column4: [
-            { range: "01-05", rank: 2, rank_name: "Feeble" },
-            { range: "06-10", rank: 4, rank_name: "Poor" },
-            { range: "11-15", rank: 6, rank_name: "Typical" },
-            { range: "16-40", rank: 10, rank_name: "Good" },
-            { range: "41-50", rank: 20, rank_name: "Excellent" },
-            { range: "51-70", rank: 30, rank_name: "Remarkable" },
-            { range: "71-90", rank: 40, rank_name: "Incredible" },
-            { range: "91-98", rank: 50, rank_name: "Amazing" },
-            { range: "99-100", rank: 75, rank_name: "Monstrous" }
-        ],
-        column5: [
-            { range: "01-10", rank: 2, rank_name: "Feeble" },
-            { range: "11-20", rank: 4, rank_name: "Poor" },
-            { range: "21-30", rank: 6, rank_name: "Typical" },
-            { range: "31-40", rank: 10, rank_name: "Good" },
-            { range: "41-60", rank: 20, rank_name: "Excellent" },
-            { range: "61-70", rank: 30, rank_name: "Remarkable" },
-            { range: "71-80", rank: 40, rank_name: "Incredible" },
-            { range: "81-95", rank: 50, rank_name: "Amazing" },
-            { range: "96-100", rank: 75, rank_name: "Monstrous" }
-        ]
-    }
-};
-    
-const raceData = [
-    {
-    "Physical form": "Normal Human",
-    "Sub Form": "",
-    "Definition": "The body is completely normal and possesses no detectable abnormalities. Any Powers the hero possesses have left no visible mark on the body.",
-    "column": 2,
-    "csshift1": "resources",
-    "cs1": 1,
-	"csshift2": "",
-    "cs2": 0,
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,25"
-  },
-  {
-    "Physical form": "Mutant",
-    "Sub Form": "Induced",
-    "Definition": "The hero started life as a Normal Human, \"Then something happened.\" As a result of a freak happenstance, the hero has been physically and genetically altered. The Fantastic Four are examples of this type.",
-    "column": 2,
-    "csshift1": "call function for cs any faserip",
-    "cs1": 1,
-    "csshift2": "Resources",
-    "cs2": -1,
-    "csshift3": "Endurance",
-    "cs3": 1,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "26,27,28,29,30"
-  },
-  {
-    "Physical form": "Mutation",
-    "Sub Form": "Random",
-    "Definition": "The hero was born to Normal humans, but a freak twist of genetic fate made him a mutant from birth. Most of these are the mutants found in the Marvel Universe, such as the X-Men.",
-    "column": 1,
-    "csshift1": "call function to add 1 to power total.",
-    "cs1": 1,
-    "csshift2": "Intuition",
-    "cs2": 1,
-    "csshift3": "Endurance",
-    "cs3": 1,
-    "csshift4": "contacts",
-    "cs4": "lab tech/Scientist",
-	"csshift5": "",
-    "cs5": 0,
-    "range": "31,32,33"
-  },
-  {
-    "Physical form": "Mutation",
-    "Sub Form": "Breed",
-    "Definition": "The hero's parents were Mutants, as were any number of preceding generations. Breed Mutants from tribes and have close-knit families; this is a defense mechanism born from generations spent hiding their true selves from normal society. Examples of Breed Mutants include the Inhumans.",
-    "column": 1,
-    "csshift1": "Intuition",
-    "cs1": 1,
-    "csshift2": "Endurance",
-    "cs2": 1,
-    "csshift3": "contacts",
-    "cs3": "family/tribe",
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "34,35"
-  },
-  {
-    "Physical form": "Android",
-    "Sub Form": "",
-    "Definition": "These are artificially created organic beings. An android is made of laboratory-created protoplasm and grows to maturity in an artificial womb. More intricately made Androids can actually interbreed with Normal Humans. One example is Vision. Androids generally resemble the race that created them; alien androids can be any shape.",
-    "column": 4,
-    "csshift1": "call function for cs any faserip",
-    "cs1": 1,
-    "csshift2": "call function to add 1 to power total.",
-    "cs2": 2,
-    "csshift3": "contacts",
-    "cs3": "lab tech/Scientist",
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "36,37,38"
-  },
-  {
-    "Physical form": "Humanoid Race",
-    "Sub Form": "",
-    "Definition": "The hero is a normal member of a human-like race from 'somewhere else.' This may be another world, era, dimension, or lost land hidden somewhere on Earth. Most can pass as Normal Humans with little disguise or explanation. Some of the Humanoid Race's Powers don't exist in their home environment, but develop as a result of the Humanoid's exposure to Earth's environment.",
-    "column": 5,
-    "csshift1": "call function for cs any faserip",
-    "cs1": 1,
-    "csshift2": "Resources",
-    "cs2": "poor",
-    "csshift3": "Contacts",
-    "cs3": "Your Race",
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "39,40,41,42,43,44,45,46"
-  },
-  {
-    "Physical form": "Surgical Composite",
-    "Sub Form": "",
-    "Definition": "The hero was created in an operating room. His body contains parts taken from several bodies. Close examination reveals the scars from this creation. The most famous example is Adam, The Frankenstein Monster. Surgical Composites are feared more than Mutants and they also possess a morbid curiosity about the people whose parts now form their bodies.",
-    "column": 2,
-    "csshift1": "Fighting",
-    "cs1": 1,
-    "csshift2": "Strength",
-    "cs2": 1,
-    "csshift3": "Endurance",
-    "cs3": 1,
-    "csshift4": "Resources",
-    "cs4": "poor",
-    "csshift5": "Contacts",
-    "cs5": "creator/hospital",
-    "range": "47"
-  },
-  {
-    "Physical form": "Modified Human",
-    "Sub Form": "Organic",
-    "Definition": "This is someone who started life as a Normal human and was later altered by some means. The change affected his body on a physical level but did not alter his DNA. Organic Modification means the hero's internal organs and nervous system have been altered.",
-    "column": 1,
-    "csshift1": "Healing",
-    "cs1": "twice as fast as humans",
-    "csshift2": "Contact",
-    "cs2": "creator",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "48,49"
-  },
-  {
-    "Physical form": "Modified Human",
-    "Sub Form": "Muscular",
-    "Definition": "This is someone who started life as a Normal human and was later altered by some means. The change affected his body on a physical level but did not alter his DNA. Muscular Modification is easy to detect; just look for a person with enhanced muscular development.",
-    "column": 1,
-    "csshift1": "Strength",
-    "cs1": 1,
-    "csshift2": "Endurance",
-    "cs2": 1,
-    "csshift3": "Contact",
-    "cs3": "creator",
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "50,51"
-  },
-  {
-    "Physical form": "Modified Human",
-    "Sub Form": "Skeletal",
-    "Definition": "This is someone who started life as a Normal human and was later altered by some means. The change affected his body on a physical level but did not alter his DNA. Skeletal Modification means the hero's original skeletal structure has been replaced or augmented by artificial means.",
-    "column": 1,
-    "csshift1": "Resist physical attacks",
-    "cs1": 1,
-    "csshift2": "Contact",
-    "cs2": "creator",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "52,53"
-  },
-  {
-    "Physical form": "Modified Human",
-    "Sub Form": "Extra Parts",
-    "Definition": "This type of body is harder to disguise than the other modifications. The body now possesses extra pieces of anatomy, which may be duplicates of normal parts or completely unique appendages such as wings, tails, or fins.",
-    "column": 2,
-    "csshift1": "Judge decision Arms fighting",
-    "cs1": 1,
-    "csshift2": "Judge decision Duplicate organs Life doubled",
-    "cs2": 2,
-    "csshift3": "Judge decision Tails additional attack",
-    "cs3": 1,
-    "csshift4": "Judge decision wings flight",
-    "cs4": 1,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "54,55,56,57"
-  },
-  {
-    "Physical form": "Demihuman",
-    "Sub Form": "Centaur",
-    "Definition": "This covers a range of human-like beings who combine the physical traits of humans and animals. Centaurs have a human head, torso, and arms mated to the body of a horse.",
-    "column": 5,
-    "csshift1": "Strength",
-    "cs1": 1,
-    "csshift2": "Power hyper speed",
-    "cs2": "good",
-    "csshift3": "Climbing",
-    "cs3": "feeble",
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "58"
-  },
-  {
-    "Physical form": "Demihuman",
-    "Sub Form": "Equiman",
-    "Definition": "This covers a range of human-like beings who combine the physical traits of humans and animals. Equimen possess horse legs in place of human ones. They have a horse's mane and tail and can pass as humans when these features are hidden.",
-    "column": 3,
-    "csshift1": "Kicking",
-    "cs1": 1,
-	 "csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "59"
-  },
-  {
-    "Physical form": "Demihuman",
-    "Sub Form": "Faun",
-    "Definition": "Fauns possess the hairy legs, short tail, and horns of a goat. Due to their resemblance to the traditional image of the devil and their carefree nature, fauns may have an initial negative popularity.",
-    "column": 2,
-    "csshift1": "Popularity",
-    "cs1": "shift 0",
-    "csshift2": "Power mental domination over opposite sex",
-    "cs2": "feeble",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "60"
-  },
-  {
-    "Physical form": "Demihuman",
-    "Sub Form": "Felinoid",
-    "Definition": "Felinoids are human-shaped, cat-like beings. They have fur-covered skin, slitted eyes, fangs, claws, and a tail. Their overall appearance resembles a humanoid feline.",
-    "column": 1,
-    "csshift1": "Power Night Vision",
-    "cs1": "excellent",
-    "csshift2": "Climbing",
-    "cs2": 1,
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "61,62"
-  },
-  {
-    "Physical form": "Demihuman",
-    "Sub Form": "Lupinoid",
-    "Definition": "Lupinoids are human-shaped, canine-like beings. They have a tail, large teeth, claws, and pointed ears. Due to their werewolf-like appearance, lupinoids face mixed public perception and are sometimes mistaken for dangerous animals.",
-    "column": 4,
-    "csshift1": "Popularity",
-    "cs1": "-1cs",
-    "csshift2": "Enhanced Smell",
-    "cs2": "good",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "63,64"
-  },
-  {
-    "Physical form": "Demihuman",
-    "Sub Form": "Avian",
-    "Definition": "Avian beings include two primary types: angelic, with wings sprouting from their shoulder blades, and harpy-like, with wings that also serve as arms. Angelic Avians reproduce normally, while Harpies lay eggs.",
-    "column": 4,
-    "csshift1": "Fighting",
-    "cs1": 1,
-    "csshift2": "Flight",
-    "cs2": 2,
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "65,66"
-  },
-  {
-    "Physical form": "Demihuman",
-    "Sub Form": "Chiropteran",
-    "Definition": "Chiropterans combine human parts with those of a bat, featuring large ears, elongated toes, and arms that serve as wings. They possess Active Sonar but often invoke fear in others due to their bat-like appearance.",
-    "column": 2,
-    "csshift1": "Power Active Sonar",
-    "cs1": "good",
-    "csshift2": "Popularity",
-    "cs2": "feeble",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "67"
-  },
-  {
-    "Physical form": "Demihuman",
-    "Sub Form": "Lamian",
-    "Definition": "Lamians are snake-like beings with a serpentine lower body instead of legs. They possess retractable fangs, lidless eyes, and scales covering their skin.",
-    "column": 4,
-    "csshift1": "Power Venomous",
-    "cs1": "excellent",
-    "csshift2": "Escape",
-    "cs2": "+1cs",
-    "csshift3": "Popularity",
-    "cs3": "shift 0",
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "68"
-  },
-  {
-    "Physical form": "Demihuman",
-    "Sub Form": "Merhuman",
-    "Definition": "Merhumans are amphibious beings with a human upper body and a fish-like tail. They have both lungs and gills but are dependent on water to survive and can only remain away from it for limited periods.",
-    "column": 2,
-    "csshift1": "Popularity",
-    "cs1": 1,
-    "csshift2": "Water Freedom",
-    "cs2": "good",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "69"
-  },
-  {
-    "Physical form": "Cyborg",
-    "Sub Form": "Artificial Limbs/Organs",
-    "Definition": "This Cyborg has parts of their body replaced by artificial devices, either due to injury or by choice. They may initially suffer from a sense of lost humanity, resulting in decreased Intuition.",
-    "column": 4,
-    "csshift1": "Intuition",
-    "cs1": -1,
-    "csshift2": "Contact",
-    "cs2": "lab/creator",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "70,71,72"
-  },
-  {
-    "Physical form": "Cyborg",
-    "Sub Form": "Mechanical Body",
-    "Definition": "The only part of the hero's original body that remains is their brain and nervous system, housed in a life-support module connected to a mechanical body. This type often has lower initial Intuition and Psyche due to depression over their mechanical existence.",
-    "column": 4,
-    "csshift1": "Intuition",
-    "cs1": -1,
-    "csshift2": "Psyche",
-    "cs2": -1,
-    "csshift3": "Power Resist disease/poison",
-    "cs3": "MN 75",
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "73,74"
-  },
-  {
-    "Physical form": "Cyborg",
-    "Sub Form": "Mechanically Augmented",
-    "Definition": "This type of Cyborg has retained their entire original body but carries various mechanical augmentations that provide their Powers. They do not suffer from the depression common to other Cyborgs.",
-    "column": 4,
-    "csshift1": "Resources",
-    "cs1": "good",
-	"csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "75,76"
-  },
-  {
-    "Physical form": "Pure Robot",
-    "Sub Form": "Humanshape",
-    "Definition": "This is a completely mechanical being designed to resemble a human in form. Examples include metallic or pseudo-fleshed imitations like Jocasta.",
-    "column": 4,
-    "csshift1": "Popularity",
-    "cs1": 0,
-    "csshift2": "Power self-healing",
-    "cs2": "good",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "77,78,79"
-  },
-  {
-    "Physical form": "Pure Robot",
-    "Sub Form": "Usuform",
-    "Definition": "This robot has a form that follows its function, designed to serve specific needs rather than resemble a human shape. Usuforms are often mistaken for industrial robots.",
-    "column": 4,
-    "csshift1": "Popularity",
-    "cs1": 0,
-	"csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "80,81,82"
-  },
-  {
-    "Physical form": "Pure Robot",
-    "Sub Form": "Metamorphic",
-    "Definition": "This type of robot can transform into two or more distinct forms, each possessing different physical abilities and powers. The most common metamorphic robots have one humanshape and one other form.",
-    "column": 4,
-    "csshift1": "Power additional form stats",
-	"csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "83,84"
-  },
-  {
-    "Physical form": "Pure Robot",
-    "Sub Form": "Computer",
-    "Definition": "The hero is a sentient computer. Though immobile, they can interact with the physical world through peripheral devices and robots. Computers have limited resistance to electrical and magnetic attacks.",
-    "column": 4,
-    "csshift1": "Reason",
-    "cs1": "+2cs",
-    "csshift2": "Fighting",
-    "cs2": "-1cs",
-    "csshift3": "Resources",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "85,86"
-  },
-  {
-    "Physical form": "Angel/Demon",
-    "Sub Form": "",
-    "Definition": "Angels and demons are magical beings from other planes of existence, embodying either benevolent or malevolent traits. Their initial popularity varies based on their alignment.",
-    "column": 5,
-    "csshift1": "Popularity",
-    "cs1": "+2 for angels, -2 for demons",
-	"csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "87"
-  },
-  {
-    "Physical form": "Deity",
-    "Sub Form": "",
-    "Definition": "A deity is a former god, demigod, or divine being whose powers have diminished. They retain formidable abilities, often restricted to the Earth Dimension, and enjoy increased popularity due to their mythological background.",
-    "column": 5,
-    "csshift1": "faserip",
-    "cs1": "+2cs",
-    "csshift2": "additional power",
-    "cs2": "travel",
-    "csshift3": "additional powers",
-    "cs3": "+2 rolls",
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "88"
-  },
-  {
-    "Physical form": "Animal",
-    "Sub Form": "",
-    "Definition": "This category includes various intelligent animals, either as natural members of a species, genetically altered, or modified by other means. They are usually accompanied by a human contact who acts as their 'owner' or handler.",
-    "column": 1,
-    "csshift1": "additional powers",
-    "cs1": -1,
-    "csshift2": "additional power",
-    "cs2": "detection",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "89"
-  },
-  {
-    "Physical form": "Vegetable",
-    "Sub Form": "",
-    "Definition": "An intelligent, mobile plant being. Such beings rely on photosynthesis and may lose strength if deprived of light and water. Their physiology and survival needs are quite different from humans.",
-    "column": 1,
-    "csshift1": "resources",
-    "cs1": 0,
-    "csshift2": "power absorption (photosynthesis)",
-    "cs2": "good",
-    "csshift3": "fighting",
-    "cs3": "-2cs",
-    "csshift4": "endurance",
-    "cs4": "+2cs",
-    "csshift5": "contacts",
-    "cs5": "none/scientist",
-    "range": "90"
-  },
-  {
-    "Physical form": "Abnormal Chemistry",
-    "Sub Form": "",
-    "Definition": "A being with an unusual chemical base, such as silicon-based life, or one with different metals in their blood. This unique biochemistry affects their diet, health, and interaction with other life forms.",
-    "column": 1,
-    "csshift1": "Endurance",
-    "cs1": "+1",
-	"csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "91"
-  },
-  {
-    "Physical form": "Mineral Life",
-    "Sub Form": "",
-    "Definition": "A being made of solid, inorganic material. Often immune to typical poisons and diseases but vulnerable to certain attacks that target their specific mineral composition.",
-    "column": 2,
-    "csshift1": "Health",
-    "cs1": "doubled",
-    "csshift2": "Movement",
-    "cs2": "-1cs",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "92"
-  },
-  {
-    "Physical form": "Gaseous Life",
-    "Sub Form": "",
-    "Definition": "A coherent cloud-like entity composed entirely of gases, able to change shape and expand or contract as desired. They are immune to most physical attacks but can be altered by special powers.",
-    "column": 5,
-    "csshift1": "Power",
-    "cs1": "phasing",
-	"csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "93"
-  },
-  {
-    "Physical form": "Liquid",
-    "Sub Form": "",
-    "Definition": "A being composed entirely of liquid, able to change form but restricted by environmental conditions like temperature. Liquids can flow through small openings but are vulnerable to freezing and dehydration.",
-    "column": 3,
-    "csshift1": "Power",
-    "cs1": "shape-shifting",
-	"csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "94"
-  },
-  {
-    "Physical form": "Energy",
-    "Sub Form": "Energy Body",
-    "Definition": "An entity composed of pure energy, often with the ability to phase through solid objects or emit radiation. Vulnerable to powers that disrupt or absorb energy.",
-    "column": 3,
-    "csshift1": "Power",
-    "cs1": "radiation emission",
-	"csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "95"
-  },
-  {
-    "Physical form": "Ethereal",
-    "Sub Form": "",
-    "Definition": "An intangible, ghost-like being that can pass through solid matter at will. While ethereal, they are immune to most physical attacks but are vulnerable to magical and mental attacks.",
-    "column": 4,
-    "csshift1": "contacts",
-    "cs1": "spiritual medium",
-	"csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "96"
-  },
-  {
-    "Physical form": "Undead",
-    "Sub Form": "",
-    "Definition": "A reanimated being, such as a zombie or vampire, that retains partial consciousness and mobility. They have unique vulnerabilities, including a weakness to holy symbols and specific rituals.",
-    "column": 1,
-    "csshift1": "Strength",
-    "cs1": "+1cs",
-    "csshift2": "Endurance",
-    "cs2": "+1cs",
-    "csshift3": "Weakness",
-    "cs3": "Excellent (20) resistance to holy symbols",
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "97"
-  },
-  {
-    "Physical form": "Compound Form",
-    "Sub Form": "",
-    "Definition": "A being with aspects of two or more body types, combining the advantages and disadvantages of each type. Compound forms are usually unique, as genetic offspring would likely only inherit one aspect.",
-    "column": 4,
-    "csshift1": "Popularity",
-    "cs1": "-1cs",
-	"csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "98"
-  },
-  {
-    "Physical form": "Changeling",
-    "Sub Form": "",
-    "Definition": "A being capable of transforming into various body types, each with distinct abilities. Each form must have a unique power, and the changeling can shift between forms over time.",
-    "column": 5,
-    "csshift1": "Transformation Speed",
-    "cs1": "10 turns per shift",
-	"csshift2": "",
-    "cs2": "",
-	"csshift3": "",
-    "cs3": 0,
-	"csshift4": "",
-    "cs4": 0,
-	"csshift5": "",
-    "cs5": 0,
-    "range": "99,100"
-  }
-]
-const PowerCategories = {
+		const PowerCategories = {
   Defensive: [
     { DieRoll: '01-15', Category: 'Body Armor', Description: 'she hero possesses artificially-created armor that provides protection and possibly a way of possessing other Powers. Armor comes in many forms, such as exotic plate-mail, nuclear-powered exoskeletons, or mechanically-created force fields. The player should work with the Judge to create proper Armor for their hero. The player can also determine which Powers are possessed by the hero and which are properties of the armor. Powers built into the armor can later be modified and enhanced; think of the changes Tony Stark has made in the Iron Man armor. On the other hand, Powers that are built into the armor may suffer mechanical failure. The Armors Power rank determines its ability to resist damage. The player also has to determine where they got the Armor in the first place. This is covered in the "Character Creation" section elsewhere in this book. If the hero gained the armor through an accident, they might not be able to repair it. Powers D2 through D9 have ranges listed on column B of the Range Table.' },
     { DieRoll: '16-20', Category: 'Force Field', Description: 'shis is the type of field used by the Invisible Woman. It provides protection against a variety of forces, including brute force, energy attacks, and extreme temperature conditions. It can be projected and used for a variety of Power stunts. The following seven force fields protect against specific forms of attack. Each protects the hero and the surrounding area. The maximum size of the force field is the number of areas equal to 10% of the Power\'s rank number. For example, a Monstrous Force Field can protect 8 areas. The force field completely absorbs any attack which has an Intensity equal to or less than the Power\'s rank number. If the Intensity is higher, it is reduced by the Power\'s rank number. The remaining Intensity breaches the force field and affects anyone within by this diminished effect. These forms cannot be used for many of the Power stunts suggested for force fields as given in the Player\'s Book. These cannot be used to physically attack or to handle solid materials. However, the hero can develop Power stunts which reflect each form\'s special nature. The hero can form shields to protect distant targets at +2CS range. By expanding his field outward, the hero can sweep his surroundings clean of anything affected by his force field. The Power can be used as a filter to sort out anything affected by his force field. The force field can be formed around something it would affect, thus trapping it. The hero can move the "trap" at will up to +2CS by means of a red FEAT.' },
@@ -1409,11 +371,58 @@ const PowerCategories = {
     { DieRoll: '98-100', Category: 'Whirlwind', Description: 'she hero can fly by creating a small cyclone that carries him through the air. The hero can travel at Power rank speed but is limited to Shift-X rank. Maneuverability is determined by the hero\'s Agility. In addition to the hero\'s body, the Whirlwind can support additional weight. Each additional 500 pounds decreases the Whirlwind\'s speed -1CS. Passengers are not battered by the high winds but are safely held aloft by updrafts in the cyclone\'s interior. Still, all passengers must make an Endurance FEAT or become air sick. The Power provides rank level Resistance to Physical and Sonic attacks. High winds can affect the hero. Strong winds decrease the Power rank by their Intensity rank number. If the wind is powerful enough, the Whirlwind can be dispersed. Such winds can be natural or created by such Powers as Matter Animation or Weather Control. Optional Powers include Weather Control and Matter Animation/Air. These are also the Nemeses.' }
   ]
 };
-
-
-
-
-</script>
+const marvelRank = {
+    columns: {
+        column1: [
+            { range: "01-05", rank: 2, rank_name: "Feeble" },
+            { range: "06-10", rank: 4, rank_name: "Poor" },
+            { range: "11-20", rank: 6, rank_name: "Typical" },
+            { range: "21-40", rank: 10, rank_name: "Good" },
+            { range: "41-60", rank: 20, rank_name: "Excellent" },
+            { range: "61-80", rank: 30, rank_name: "Remarkable" },
+            { range: "81-96", rank: 40, rank_name: "Incredible" },
+            { range: "97-100", rank: 50, rank_name: "Amazing" }
+        ],
+        column2: [
+            { range: "01-05", rank: 2, rank_name: "Feeble" },
+            { range: "06-25", rank: 4, rank_name: "Poor" },
+            { range: "26-75", rank: 6, rank_name: "Typical" },
+            { range: "78-95", rank: 10, rank_name: "Good" },
+            { range: "96-100", rank: 20, rank_name: "Excellent" }
+        ],
+        column3: [
+            { range: "01-05", rank: 2, rank_name: "Feeble" },
+            { range: "06-10", rank: 4, rank_name: "Poor" },
+            { range: "11-40", rank: 6, rank_name: "Typical" },
+            { range: "41-80", rank: 10, rank_name: "Good" },
+            { range: "81-95", rank: 20, rank_name: "Excellent" },
+            { range: "96-100", rank: 30, rank_name: "Remarkable" }
+        ],
+        column4: [
+            { range: "01-05", rank: 2, rank_name: "Feeble" },
+            { range: "06-10", rank: 4, rank_name: "Poor" },
+            { range: "11-15", rank: 6, rank_name: "Typical" },
+            { range: "16-40", rank: 10, rank_name: "Good" },
+            { range: "41-50", rank: 20, rank_name: "Excellent" },
+            { range: "51-70", rank: 30, rank_name: "Remarkable" },
+            { range: "71-90", rank: 40, rank_name: "Incredible" },
+            { range: "91-98", rank: 50, rank_name: "Amazing" },
+            { range: "99-100", rank: 75, rank_name: "Monstrous" }
+        ],
+        column5: [
+            { range: "01-10", rank: 2, rank_name: "Feeble" },
+            { range: "11-20", rank: 4, rank_name: "Poor" },
+            { range: "21-30", rank: 6, rank_name: "Typical" },
+            { range: "31-40", rank: 10, rank_name: "Good" },
+            { range: "41-60", rank: 20, rank_name: "Excellent" },
+            { range: "61-70", rank: 30, rank_name: "Remarkable" },
+            { range: "71-80", rank: 40, rank_name: "Incredible" },
+            { range: "81-95", rank: 50, rank_name: "Amazing" },
+            { range: "96-100", rank: 75, rank_name: "Monstrous" }
+        ]
+    }
+};
+    </script>
 
 </body>
 </html>
