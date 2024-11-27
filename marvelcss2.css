@@ -241,9 +241,8 @@ body {
     border: 2px solid #002366; /* Blue border */
     border-radius: 5px; /* Rounded corners */
     margin-bottom: 15px; /* Space below the title */
-	width: 85%;
-	
-	
+    margin-left: -10px; /* Move this specific section-title to the right */
+    width: calc(100% - 25px); /* Adjust width to account for the margin */
 }
 
 
