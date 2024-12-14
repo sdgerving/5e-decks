@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Critical Hits Deck</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body> 
+<div class="navbar-image"></div>
+<div class="Navbar_container">
+        <a href="index.html"><button class="btn critical">Home</button></a>
+       <a href="Fail Deck.html"><button class="btn other">Fail Deck</button></a>
+	   <a href="dmCrits.html"><button class="btn dm">DM Critical Deck</button></a>
+	   <a href="marvelIndex.html"><button class="btn dm">Marvel</button></a>
+        
+    </div>
+	<img src="images/DnD Logo.png" alt="Parchment Banner" class="below-navbar-image">
+    <div class="pchdtxt">Player Critical Hit Deck</div>
+	<div class="attack-type">
+        <label>
+            <input class="AttackType" type="radio" name="attackType" value="slashing" checked>
+            <img src="images/slashing.png" alt="Slashing Image" class="weaponimage">
+        </label>
+        <label>
+            <input class="AttackType" type="radio" name="attackType" value="piercing">
+            <img src="images/piercing.png" alt="Piercing Image" class="weaponimage">
+        </label>
+        <label>
+            <input class="AttackType" type="radio" name="attackType" value="bludgeoning">
+            <img src="images/blunt.png" alt="Blunt Image" class="weaponimage">
+        </label>
+        <label>
+            <input class="AttackType" type="radio" name="attackType" value="magic">
+            <img src="images/magic.png" alt="Magic Image" class="weaponimage">
+        </label>
+    </div>
+	<button id="drawCardButton" class="drawbutton">Draw Card</button>
+
+     <div class="parchment-container">
+    <img src="images/parchment.png" alt="Parchment Image" class="parchment-image">
+    <div id="deckStatus" class="DeckStatus"></div>
+    <div id="cardtext" class="cardtext"></div><br>
+    <div id="severity" class="severity"></div><br>
+    <div id="cardsRemaining" class="cardsRemaining"></div>
+	 <button class="newdeck">Reset Deck</button>
+</div>
+    <script>
+    let originalDataArray = [
+	["Sweep the Legs."," Maximum damage, and the target must make a DC 12 Dexterity saving throw. On the failed save, target is knocked prone.","Pinned","Double damage, and the target is pinned to the ground and becomes restrained.","Shin Bash.","Maximum damage.","Blast of Power.","Double Damage","Setback",1],
+["Sliced Tendon.","Double damage, and the target's speed is reduced by 1/2 until the end of the target's next turn.","In the Knee"," Maximum damage","Low Blow","Double Damage","Surge of Power","Maximum damage, and you can immediately cast the same spell against the same target, expending a spell slot as normal.","Setback",2],
+["Follow up.","Maximum damage, and you may make another attack against the same target","Press the advantage.","Double damage and, if this was a melee attack, you can make a DC 16 Strength (Athletics) check to increase this to triple damage.","Winded. Maximum damage.","Bombardment. Double damage","Setback",3],
+["Brow slash."," Double damage, and the target is blinded until the end of its next turn","Right in the Kisser.","Maximum damage, and the target cannot speak for 1d4 rounds.","Nighty night! Double damage, and the target must make a DC 12 Constitution saving throw. On a failed save, the target is knocked unconscious.","Nighty night!","Double damage, and the target must make a DC 12 Constitution saving throw. On a failed save, the target is knocked unconscious.","Magical barrage. Maximum damage, and an additional target within range is affected at half potency, or the spell's area of effect is increased by 5 ft.","Setback",4],
+["Slash to the ribs","Maximum Damage.","Poke in the belly","Double damage","Get back!","Maximum damage, and the target must make a DC 12 Constitution saving throw. On a failed save, the target is pushed back 5 ft.","Terrifying display.","Double damage, and all enemies that can see you must make a DC 12 Wisdom saving throw. On a failed save, they are frightened of you until the end of your next turn","Setback",5],
+["Calf slash."," Double damage","Target Practice.","Maximum damage, and any enemy of the target within range may make an attack of opportunity with disadvantage against it.","...And stay down","Double damage, and the target must make a DC 12 Constitution saving throw. On a failed save, the target is knocked prone.","Targeted Spell.","Maximum damage","Setback",6],
+["Nave to chops","Double Damage","Follow-up","Maximum damage, and you may make another attack with disadvantage against the same target","Soften 'em up.","Double damage, and the target must make a DC 12 Constitution saving throw. On a failed save, the target has disadvantage on saving throws till the end of their next turn.","Precise magic."," Maximum damage","Setback",7],
+["You get what you pay for","Maximum damage, and you and the target must make a contested Strength check. If the target loses, their weapon is partially broken and deals 1/2 damage until it is repaired.","Distracting jab.","Double damage, and the target must make a DC 12 Constitution saving throw. On a failed save, the target has disadvantage on their next attack","Battered shoulder.","Maximum damage","Eruption.","Double damage","Setback",8],
+["Bloodied nose.","Maximum Damage.","Neck Wound","Double Damage","Stunning Blow.","Maximum damage and the target must make a DC 12 Constitution saving throw. On a failed save, the target is stunned","Spell Drain","Double damage, and the target must make a DC 12 saving throw. On a failed save, the target is stunned","Setback",9],
+["Slow Recovery","Double damage, and the target must make a DC 12 Constitution saving throw. On a failed save, the target can make one less attack on their next turn.","Shoulder Jab","Maximum damage.","Rap on the Knuckles","Double damage","Resistance is futile.","Maximum damage and, if the target is resistant to this damage type, it loses that resistance for 1 minute.","Setback",10],
+["Slashed shoulder.","Maximum Damage.","Pierced hand. Double damage.","Bruised joints.","Maximum damage, and the target must make a DC 12 Constitution saving throw. On a failed save, the target has disadvantage on its next melee attack.","Didn't want it anyway...","Double damage, and a non-magical item the target is holding or wearing is also affected by the damage type of the spell.","Setback",10],
+["Terrifying slash.","Maximum damage, and the target must make a DC 12 Wisdom saving throw. On a failed save, the target is frightened of you until the end of its next turn.","With a sharp Stick.","Double damage, and the target must make a DC 12 Dexterity saving throw. On a failed save, the target loses an eye (G.O.D. decides which one)","Bonk on the noggin.","Maximum damage.","Spell storm","Double Damage","Setback",11],
+["Low slash","Maximum damage","Pierced thigh","Double damage","Something Slipped."," Maximum Damage, and the target's AC is reduced by 1d4 until the end of its next turn.","Big boom","If this attack deals force or thunder damage: the target is pushed back by 1d4x5 ft. if it is Large or smaller, taking 1d6 bludgeoning damage for every 5 ft. traveled.","Setback",12],
+["Vexing cut","Double damage, and the target must make a DC 12 Constitution saving throw. On a failed save, the target cannot take reactions until the end of your next turn.","Between the shoulders.","Maximum damage.","Gut punch.","Double Damage.","Guiding attack."," Maximum damage, and the target has disadvantage on saving throws against your spells for 1d4 rounds.","Setback",13],
+["Forearm blow.","Double damage.","Find an opening.","Maximum damage, and you have advantage on your next attack against the target.","Drop it.","Double damage, and the target must make a DC 12 Strength or Dexterity saving throw. On a failed save, the target drops what they are holding (G.O.D. decides which hand, or determines randomly).","Onslaught","Maximum damage","Setback",14],
+["Forearm blow.","Double damage.","Find an opening."," Maximum damage, and you have advantage on your next attack against the target.","Drop it!","Double damage, and the target must make a DC 12 Strength or Dexterity saving throw. On a failed save, the target drops what they are holding (G.O.D. decides which hand, or determines randomly).","Onslaught."," Maximum damage","Setback",15],
+["Sliced tendon","Triple damage, and the target's speed is reduced to 5 ft. until the end of the target's next turn.","In the knee.","Maximum damage, and roll the damage dice again.","Low blow.","Triple damage.","Surge of Power.","Maximum damage, and you can immediately cast the same spell against any target within range, expending a spell slot as normal.","Dangerous",16],
+["Sweep the legs."," Maximum damage, and the target must make a DC 14 Dexterity saving throw. On a failed save, the target is knocked prone.","Pinned.","Triple damage, and the target is pinned to the ground and becomes restrained.","Shin bash.","Maximum damage, and roll the damage dice again.","Blast of power","Triple damage","Dangerous",17],
+["Slice to the cheek.","Triple damage.","Right in the kisser.","Maximum damage, and the target cannot speak for 2d4 rounds.","Nighty night!","Triple damage, and the target must make a DC 14 Constitution saving throw. On a failed save, the target is knocked unconscious.","Dangerous",18],
+["Follow up.","Maximum damage, and you may make another attack with advantage against the same target.","Press the advantage.","Triple damage and, if this was a melee attack, you can make a DC 14 Strength (Athletics) check to increase this to quadruple damage.","Winded.","Maximum damage, and roll the damage dice again.","Bombardment.","Triple damage.","Dangerous",19],
+["Brow Slash.","Triple damage, and the target is blind for 1d4+1 rounds.","Pierced ear.","Maximum damage, and roll the damage dice again","Bashed nose.","Triple damage.","Magical Barrage.","Maximum damage, and 3 additional targets within range are affected at half potency, or the spell's area of effect is increased by 10 ft.","Dangerous",20],
+["Slashed shoulder.","Maximum damage, and roll the damage dice again.","Pierced hand.","Triple damage.","Bruised joints.","Maximum damage, and the target must make a DC 14 Constitution saving throw. On a failed save, the target has disadvantage on attacks for 1d4 rounds.","Didn't want it anyway...","Triple damage, and two non-magical items the target is holding or wearing are also affected by the damage type of the spell.","Dangerous",21],
+["You get what you pay for.","Maximum damage, and you and the target must make a contested Strength check. If the target loses, their weapon is partially broken and deals 1/4 damage until it is repaired.","Distracting jab.","Triple damage, and the target must make a DC 14 Constitution save, the target has disadvantage on attacks for 1d4+1 rounds.","Battered shoulder.","Maximum damage, and roll the dice again","Eruption.","Triple damage.","Dangerous",22],
+["Low slash.","Maximum damage, and roll the damage dice again.","Pierced thigh.","Triple damage.","Something slipped.","Maximum damage, and the target's AC is reduced by 2d4 until the end of its next turn.","Big Boom.","Triple damage. If this attack deals force or thunder damage: the target is pushed back 2d4x5 ft. if it is large or smaller, taking 1d6 bludgeoning damage for every 5 ft. traveled.","Dangerous",23],
+["Vexing cut.","Triple damage, and the target must make a DC 14 Constitution saving throw. On a failed save, the target cannot take reactions for 2d4 rounds.","Follow-up.","Maximum damage, and you may make another attack against the same target.","Soften 'em up.","Triple damage, and the target must make a DC 14 Constitution saving throw. On a failed save, the target has disadvantage on saving throws for 1d4+1 rounds.","Guiding attack.","Maximum damage, and the target has disadvantage on saving throws against your spells for 2d4 rounds.","Dangerous",24],
+["Slash to the ribs.","Maximum damage, and roll the damage dice again.","Poke in the belly.","Triple damage.","Get back!","Maximum damage, and the target must make a DC 14 Constitution saving throw. On a failed save the target is pushed back 10 ft.","Terrifying display","Triple damage, and all enemies that can see you must make a DC 14 Wisdom saving throw. On a failed save, they are frightened of you for 1d4+1 rounds.","Dangerous",25],
+["Calf slash.","Triple damage.","Target practice.","Maximum damage, and any enemy of the target within range may make an attack of opportunity against it.","...And stay down.","Triple damage, and the target must make a DC 14 Constitution saving throw. On a failed save, the target is knocked prone.","Targeted spell.","Maximum damage, and roll the damage dice again.","Dangerous",26],
+["Slow recovery.","Triple damage, and the target must make a DC 14 Constitution saving throw. On a failed save, the target can make two fewer attacks on their next turn.","Shoulder jab.","Maximum damage, and roll the damage dice again.","Rap on the knuckles.","Triple damage.","Resistance is futile.","Maximum damage and, if the target is resistant to this damage type, it loses that resistance for 1 minute. If the target isn't resistant, it becomes vulnerable to this damage type for 1 minute.","Dangerous",27],
+["Terrifying slash.","Maximum damage, and the target must make a DC14 Wisdom saving throw. On a failed save, the target is frightened of you for 2d4 rounds.","With a sharp stick.","Triple damage, and the target must make a DC 14 Dexterity saving throw. On a failed save, the target loses an eye (G.O.D. decides which one).","Bonk on the noggin.","Maximum damage, and roll the damage dice again.","Spell storm.","Triple Damage.","Dangerous",28],
+["Forearm blow.","Triple Damage.","Find an opening.","Maximum damage, and you have advantage on attacks against the target for 1d4+1 rounds.","Drop it!","Triple damage, and the target must make a DC 14 Strength or Dexterity saving throw. On a failed save, the target drops what they are holding (G.O.D. decides which hand, or determines randomly).","Onslaught.","Maximum Damage, and roll the damage dice again.","Dangerous",29],
+["Don't lose your head!","Quadruple damage and, if the damage the target takes is equal to or greater than 1/2 of their maximum hit points, they are decapitated.","Pressure point.","Quadruple damage, and the target must make a DC 18 Constitution saving throw. On a failed save, the target is paralyzed.","Nighty night!","Quadruple damage and, if the damage the target takes is equal to or greater than 1/4 of its maximum hit points. it is knocked unconscious.","Rejuvenation.","Quadruple damage, and you regain a spell slot. Roll a d6 to determine the level of the spell slot.","Deadly",30],
+["Don't lose your head!","Quadruple damage and, if the damage the target takes is equal to or greater than 1/2 of their maximum hit points, they are decapitated.","Pressure point.","Quadruple damage, and the target must make a DC 18 Constitution saving throw. On a failed save, the target is paralyzed.","Nighty night!","Quadruple damage and, if the damage the target takes is equal to or greater than 1/4 of its maximum hit points, it is knocked unconscious.","Rejuvenation.","Quadruple damage, and you regain a spell slot. Roll a d6 to determine the level of the spell slot.","Deadly",30],
+["I never touched a drop!","Quadruple damage and, if the damage the target takes is equal to or greater than 1/4 of their maximum hit points, they lose a leg.","Chink in the armor.","Quadruple damage, and the target becomes vulnerable to piercing damage for 1 minute.","Shattered knee.","Quadruple damage, and the target's speed is reduced by 1/2. Additionally, for every 5 ft. the target moves, it takes 1d6 damage.","Blink and you'll miss it.","Quadruple damage, and the target must make a DC 18 Wisdom saving throw. On a failed save, the target is unable to see you for 1 minute.","Deadly",31],
+["Terrifying slash.","Maximum damage, and the target must make a DC 16 Wisdom saving throw. On a failed save, the target is frightened of you for 3d4 rounds.","With a sharp stick.","Quadruple damage, and the target must make a DC 16 Dexterity saving throw. On a failed save, the target loses an eye (G.O.D. decides which one).","Bonk on the noggin.","Maximum double damage.","Spell storm.","Quadruple damage","Life Threatening",32],
+["Vexing cut.","Quadruple damage, and the target must make a DC 16 Constitution saving throw. On a failed save, the target cannot take reactions for 3d4 rounds.","Between the shoulders.","Maximum double damage.","Gut punch.","Quadruple damage.","Guiding attack.","Maximum damage, and the target has disadvantage on saving throws against your spells for 3d4 rounds.","Life Threatening",33],
+["Slashed Shoulder.","Maximum double damage.","Pierced hand.","Quadruple damage.","Bruised joints.","Maximum damage, and the target must make a DC 16 Constitution saving throw. On a failed save, the target has disadvantage on attacks for 2d4+2 rounds.","Didn't want it anyway...","Quadruple damage, and three items the target is holding or wearing are also affected by the damage type of the spell.","Life Threatening",34],
+["Slash to the ribs. Maximum double damage.","Poke in the belly.","Quadruple damage.","Get back!","Maximum damage, and the target must make a DC 16 Constitution saving throw. On a failed save, the target is pushed back 15 ft.","Terrifying display.","Quadruple damage, and all enemies that can see you must make a DC 16 Wisdom saving throw. On a failed save, they are frightened of you for 2d4+2 rounds.","Life Threatening",35],
+["Sweep the legs.","Maximum damage, and the target must make a DC 16 Dexterity saving throw. On a failed save, the target is knocked prone.","Pinned.","Quadruple damage, and the target is pinned to the ground and becomes restrained.","Shin bash.","Maximum double damage.","Blast of power.","Quadruple damage.","Life Threatening",36],
+["Bloodied nose.","Maximum damage.","Neck wound.","Quadruple damage.","Stunning blow.","Maximum damage, and the target must make a DC 16 Constitution saving throw. On a failed save, the target is stunned.","Spell drain.","Quadruple damage, and the target must make a DC 16 saving throw using its spellcasting ability. On a failed save, the target is unable to cast spells for 3d4 rounds.","Life Threatening",37],
+["Slow Recovery.","Quadruple damage, and the target must make a DC 16 Constitution saving throw. On a failed save, the target can make three fewer attacks on their next turn.","Shoulder jab.","Maximum damage.","Rap on the knuckles.","Quadruple damage.","Resistance is futile.","Maximum damage, and the target becomes vulnerable to this damage type for 1 minute.","Life Threatening",38],
+["Nave to chops","Quadruple damage.","Follow-up.","Maximum damage, and you may make another attack with advantage against the same target.","Soften 'em up.","Quadruple damage, and the target must make a DC 16 Constitution saving throw. On a failed save, the target has disadvantage on saving throws for 2d4+2 rounds.","Precise magic.","Maximum damage.","Life Threatening",39],
+["Slice to the Cheek.","Quadruple damage.","Right in the Kisser.","Maximum damage, and the target cannot speak for 3d4 rounds.","Nighty night!","Quadruple damage, and the target must make a DC 16 Constitution saving throw. On a failed save, the target is knocked unconscious.","Impact.","Maximum double damage.","Life Threatening",40],
+["Follow-up.","Maximum damage, and you may make another attack.","Press the advantage.","Quadruple damage and, if this was a melee attack, you can make a DC 16 Strength (Athletics) check to increase this to quintuple damage.","Winded.","Maximum double damage.","Bombardment.","Quadruple damage.","Life Threatening",41],
+["Brow slash.","Quadruple damage, and the target is blinded for 3d4+2 rounds.","Pierced ear.","Maximum double damage.","Bashed nose.","Quadruple damage.","Magical barrage.","Maximum damage, and 3 additional targets within range are affected at half potency, or the spell's area of effect is increased by 15 ft.","Life Threatening",42],
+["Calf slash.","Quadruple damage.","Target Practice.","Maximum damage, and any enemy of the target within range may make an attack of opportunity with advantage against it.","...And stay down.","Quadruple damage, and the target must make a DC 16 Constitution saving throw. On a failed save, the target is knocked prone.","Targeted spell.","Maximum double damage.","Life Threatening",43],
+["Sliced tendon.","Quadruple damage, and the target's speed is reduced to 0 ft. until the end of the target's next turn.","In the knee.","Maximum double damage.","Low blow.","Quadruple damage.","Surge of power.","Maximum damage, and you can immediately cast the same spell against any target within range. This second attack does not expend a spell slot.","Life Threatening",44],
+["You get what you pay for.","Maximum damage, and you and the target must make a DC 16 Constitution saving throw. On a failed save, the target has disadvantage on attacks for 2d4+2 rounds.","Battered shoulder.","Maximum double damage.","Eruption.","Quadruple damage.","Life Threatening",45],
+["Forearm blow.","Quadruple damage.","Find an opening.","Maximum damage, and you have advantage on attacks against the target for 2d4+2 rounds.","Drop it!","Quadruple damage, and the target must make a DC 16 Strength or Dexterity saving throw. On a failed save, the target drops what they are holding (G.O.D. decides which hand, or determines randomly).","Onslaught.","Maximum damage.","Life Threatening",46],
+["Don't lose your head.","Quadruple damage, and if the damage you take is equal to or greater than 1/2 of your maximum hit points, you are decapitated.","Feeling faint...","You have disadvantage on Strength, Dexterity, and Constitution-based rolls for 1d10 rounds. Additionally, you must make a DC 18 Constitution saving throw at the beginning of each of your turns. On a failed save, you fall prone.","Who am I?!","Make a DC 18 Constitution saving throw. On a failed save, you forget who you are and everything about yourself. You lose all the benefits of your class including abilities and spells.","Mind Wipe.","Make a DC 18 Wisdom saving throw. On a failed save, roll a d6, and you are permanently unable to see or hear: 1-2 Dwarves, 3-4 Elves, or 5-6 Halflings.","Deadly",47],
+["Disarmed.","Quadruple damage and, if the damage the target takes is equal to or greater than 1/2 of their maximum hit points, they lose an arm/hand.","Distracting jab.","Quadruple damage, and the target has disadvantage on attacks until the end of the encounter.","Crushed hand.","Quadruple damage, and the target loses use of one of its arms or hands.","Terrifying Display.","Quadruple damage, and all enemies that can see you must make a DC 18 Wisdom saving throw. On a failed save, they are frightened of you. An enemy can repeat this saving throw at the end of its turn to stop being frightened.","Deadly",48],
+["Gutted.","Quadruple damage and, if the damage the target takes is equal to or greater than 1/2 of their maximum hit points, they are disemboweled.","Shot through the heart.","Quadruple damage, and the target loses 1/4 of their maximum hit points at the beginning of their next 3 rounds.","Tenderizer.","Quadruple damage, and the target becomes vulnerable to bludgeoning damage for 1 minute.","Detonation.","Quadruple damage, and all creatures within 15 ft. of the target are also affected.","Deadly",49]
+
+    ];
+	 let dataArray = [...originalDataArray]; // Initialize dataArray
+
+function randomizeAndFetch() {
+    if (dataArray.length <= 1) {
+        document.getElementById('deckStatus').textContent = "Deck Empty";
+        document.getElementById('drawCardButton').style.display = 'none';
+        document.getElementById('cardsRemaining').textContent = `Cards Remaining: ${dataArray.length - 1}`;
+        return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * dataArray.length);
+    fetchTextForIndex(randomIndex);
+}
+
+function fetchTextForIndex(index) {
+    if (dataArray[index]) {
+        const [redslash, slashing, redpierce, piercing, redbludg, bludgeoning, redmagic, magic, severity,cdnum] = dataArray[index];
+        const attackType = document.querySelector('input[name="attackType"]:checked')?.value || 'slashing';
+        let displayText = "";
+
+        switch (attackType) {
+            case "slashing":
+                displayText = `<span style="color:#D22B2B">${redslash}</span>  ${slashing} <br><br>Severity: ${severity}<br><br>Card Number: ${cdnum}`;
+                break;
+            case "piercing":
+                displayText = `<span style="color:#D22B2B;">${redpierce}</span>  ${piercing} <br><br>Severity: ${severity}<br><br>Card Number: ${cdnum}`;
+                break;
+            case "bludgeoning":
+                displayText = `<span style="color:#D22B2B;">${redbludg}</span>  ${bludgeoning} <br><br>Severity: ${severity}<br><br>Card Number: ${cdnum}`;
+                break;
+            case "magic":
+                displayText = `<span style="color:#D22B2B;">${redmagic}</span>  ${magic} <br><br>Severity: ${severity}<br><br>Card Number: ${cdnum}`;
+                break;
+        }
+
+        if (displayText.split(' ').length > 12) {
+            displayText = insertLineBreaks(displayText);
+        }
+
+        document.getElementById('cardtext').innerHTML = displayText;
+
+        dataArray.splice(index, 1); // Remove used entry from the array
+        updateCardsRemaining();
+
+        if (dataArray.length === 0) {
+            document.getElementById('deckStatus').textContent = "Deck Empty";
+            document.getElementById('drawCardButton').style.display = 'none';
+        }
+    }
+}
+        function insertLineBreaks(text) {
+            const words = text.split(' ');
+            let result = '';
+            for (let i = 0; i < words.length; i++) {
+                result += words[i] + ' ';
+                if ((i + 1) % 12=== 0) {
+                    result += '<br>';
+                }
+            }
+            return result.trim();
+        }
+
+        function updateCardsRemaining() {
+            document.getElementById('cardsRemaining').textContent = `Cards Remaining: ${dataArray.length}`;
+        }
+
+        function newDeck() {
+            dataArray = [...originalDataArray]; // Reset dataArray to original
+            document.getElementById('deckStatus').textContent = ""; 
+            document.getElementById('cardtext').innerHTML = ""; 
+            document.getElementById('drawCardButton').style.display = 'inline'; 
+            updateCardsRemaining(); // Update the cards remaining display
+        }
+
+        // Set up event listeners after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCardsRemaining(); // Initial update
+            document.getElementById('drawCardButton').addEventListener('click', randomizeAndFetch); // Draw card button
+            document.querySelector('.newdeck').addEventListener('click', newDeck); // Add listener for new deck
+        });
+    </script>
+</body>
+</html>

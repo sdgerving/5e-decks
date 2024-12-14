@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="marvelcss.css">
 </head>
 <body>
-
-    <!-- Navigation Bar -->
+	
+   
     <div class="navbar">
         <ul>
             <a href="index.html"><button class="btn other">Home</button>
@@ -66,17 +66,19 @@
         <p><strong>Psyche:</strong> <span id="psyche-roll"></span> <span id="psyche-rank"></span> <span id="psyche-rank-name"></span></p>
     </div>
 
-    <div class="section definition" id="definition-section">
-        <div style="width: 50px;"></div> <!-- Blank space of 200px -->
-        <div id="definition-content"></div>
-			<p id="definition-text"></p><!-- Placeholder for the Definition text -->
+   <div class="section" id="race-description">
+        <div class="section-title">Race Description</div>
+        <p id="definition-text"></p>
     </div>
 </div>
-      <div class="section" id="powers">
+<div class="section" id="powers">
         <div class="section-title">Powers</div>
         <p id="powers-count">Powers: </p>
-        <ul id="powers-list"></ul>
-    </div>
+        <div class="powers-container">
+            <ul id="powers-list"></ul>
+            <div id="power-description" class="scroll-box"></div>
+        </div>
+
 
     <div class="section" id="talents">
         <div class="section-title">Talents</div>
@@ -87,7 +89,6 @@
         <div class="section-title">Contacts</div>
         <p id="contacts-count">Contacts: </p>
     </div>
-
     </div>
 
     <script>
@@ -154,17 +155,16 @@ function rollCharacter() {
             `<span style="font-size: 35px;"></span> <span style="color: Red; font-size: 35px;">${healthTotal}</span>`;
         document.getElementById("karma-value").innerHTML = 
             `<span style="font-size: 35px;"></span> <span style="color:red ; font-size: 35px;">${karmaTotal}</span>`;
-
     } else {
         console.error(`No race found for roll: ${raceRoll}`);
     }
 }
-	function rollForPowersTalentsContacts() {
+
+function rollForPowersTalentsContacts() {
     try {
         const powerGenRoll = Math.floor(Math.random() * 100) + 1;
         let powers, talents, contacts;
 
-        // Assign values based on the powerGenRoll range
         if (powerGenRoll <= 12) { powers = 1; talents = 1; contacts = 1; }
         else if (powerGenRoll <= 26) { powers = 2; talents = 1; contacts = 1; }
         else if (powerGenRoll <= 41) { powers = 3; talents = 1; contacts = 1; }
@@ -178,12 +178,10 @@ function rollCharacter() {
         else if (powerGenRoll <= 99) { powers = 12; talents = 5; contacts = 5; }
         else { powers = 14; talents = 6; contacts = 6; }
 
-        // Display the results on the page
-        document.getElementById("powers-count").textContent = `Powers: Roll: ${powerGenRoll} -Total Powers: ${powers}`;
+        document.getElementById("powers-count").textContent = `Powers: Roll: ${powerGenRoll} - Total Powers: ${powers}`;
         document.getElementById("talents-count").textContent = `Talents: ${talents}`;
         document.getElementById("contacts-count").textContent = `Contacts: ${contacts}`;
 
-        // Roll powers
         rollPowerClasses(powers);
     } catch (error) {
         console.error("Error in rollForPowersTalentsContacts:", error);
@@ -193,7 +191,9 @@ function rollCharacter() {
 function rollPowerClasses(powers) {
     try {
         const powerList = document.getElementById("powers-list");
-        powerList.innerHTML = ""; // Clear previous list
+        powerList.innerHTML = ""; 
+        const powerDescription = document.getElementById("power-description");
+        powerDescription.innerHTML = ""; 
 
         const powerClassCategories = [
             { range: [1, 5], class: "Defensive" },
@@ -214,20 +214,13 @@ function rollPowerClasses(powers) {
             { range: [93, 100], class: "Travel" }
         ];
 
-        // Assuming `columnKey` is already determined from the race entry
-        const columnKey = "column1";  // Example: update with the actual columnKey dynamically
+        const columnKey = "column1";
 
         for (let i = 0; i < powers; i++) {
             const roll = Math.floor(Math.random() * 100) + 1;
             const category = powerClassCategories.find(cat => roll >= cat.range[0] && roll <= cat.range[1]);
 
             if (category) {
-                // Validate the existence of category powers
-                if (!PowerCategories[category.class]) {
-                    console.error(`No powers found for category: ${category.class}`);
-                    continue;
-                }
-
                 const selectedPower = getRandomPowerFromCategory(PowerCategories[category.class]);
 
                 if (!selectedPower) {
@@ -235,47 +228,18 @@ function rollPowerClasses(powers) {
                     continue;
                 }
 
-                // Roll for Marvel Rank based on the selected columnKey
-                const attributeRoll = Math.floor(Math.random() * 100) + 1;
-                const rankInfo = marvelRank.columns[columnKey].find(rank => {
-                    const [min, max] = rank.range.split("-").map(Number);
-                    return attributeRoll >= min && attributeRoll <= max;
+                const li = document.createElement("li");
+                li.classList.add('power-item');
+                li.textContent = `${selectedPower.Category}`;
+                li.dataset.description = selectedPower.Description;
+
+                li.addEventListener("click", () => {
+                    powerDescription.innerHTML = `
+                        <strong>Description:</strong> ${li.dataset.description}
+                    `;
                 });
 
-                // If a valid rank is found, format the output
-                if (rankInfo) {
-                    const marvelRankText = `${rankInfo.rank_name} (${rankInfo.rank})`;
-
-                    // Create the list item for the power
-                    const li = document.createElement("li");
-                    li.classList.add('power-item'); // Add the class to be used for hover effect
-                    li.innerHTML = `
-                        <span style="font-size: 24px; font-weight: bold; color: #ff1a1a;">${selectedPower.Category}</span> - 
-                        <span style="font-size: 24px; font-weight: bold; color: blue;">${marvelRankText}</span>
-                    `;
-                    
-                    // Add the description as a tooltip (hidden by default)
-                    const tooltip = document.createElement('div');
-                    tooltip.classList.add('tooltip');
-                    tooltip.textContent = selectedPower.Description;
-                    li.appendChild(tooltip);
-
-                    // Add the power item to the list
-                    powerList.appendChild(li);
-
-                    // Hover functionality to show the tooltip
-                    li.addEventListener('mouseenter', () => {
-                        tooltip.style.visibility = 'visible';
-                        tooltip.style.opacity = 1;
-                    });
-
-                    li.addEventListener('mouseleave', () => {
-                        tooltip.style.visibility = 'hidden';
-                        tooltip.style.opacity = 0;
-                    });
-                } else {
-                    console.error(`No rank found for roll: ${attributeRoll} in ${columnKey}`);
-                }
+                powerList.appendChild(li);
             } else {
                 console.error(`No category found for roll: ${roll}`);
             }
@@ -285,27 +249,18 @@ function rollPowerClasses(powers) {
     }
 }
 
-
-
-
-	function getRandomPowerFromCategory(categoryPowers) {
+function getRandomPowerFromCategory(categoryPowers) {
     try {
-        const roll = Math.floor(Math.random() * 100) + 1;  // Roll between 1 and 100
+        const roll = Math.floor(Math.random() * 100) + 1;
 
-        // Check if categoryPowers is valid
         if (!Array.isArray(categoryPowers) || categoryPowers.length === 0) {
             throw new Error("Invalid category powers.");
         }
 
-        console.log(`Rolling for power: ${roll}`);
-
-        // Find a matching power from the category
         const power = categoryPowers.find(power => {
-            // Check if DieRoll is a range or a single value
             let min, max;
             const dieRollParts = power.DieRoll.split('-');
 
-            // If it's a single value, treat it as a range [value, value]
             if (dieRollParts.length === 1) {
                 min = max = parseInt(dieRollParts[0], 10);
             } else if (dieRollParts.length === 2) {
@@ -316,21 +271,8 @@ function rollPowerClasses(powers) {
                 return false;
             }
 
-            // Validate that min and max are valid numbers
-            if (isNaN(min) || isNaN(max)) {
-                console.error(`Invalid DieRoll range: ${power.DieRoll}`);
-                return false;
-            }
-
-            console.log(`Checking power: ${power.Description} with DieRoll range: [${min}, ${max}]`);
-
-            // Return true if the roll falls within the range, inclusive
             return roll >= min && roll <= max;
         });
-
-        if (!power) {
-            console.error(`No valid power selected for roll ${roll} in category ${categoryPowers[0].Category}`);
-        }
 
         return power || null;
     } catch (error) {
@@ -338,11 +280,6 @@ function rollPowerClasses(powers) {
         return null;
     }
 }
-	
-
-
-
-
 
 function enableEditing() {
     addInputFields("character-info");

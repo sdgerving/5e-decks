@@ -4,22 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fail Deck</title>
-    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="style.css">
 </head>
-<body> 
-<div class="container">
-        <a href="index.html"><button class="btn other">Home</button>
-		<a href="Player Critical Hit Deck.html"> <button class="btn critical">Critical Deck</button></a>
+<body>
+    <!-- Navbar background image -->
+   
+    
+    <!-- Navbar container -->
+    <div class="Navbar_container">
+        <a href="index.html"><button class="btn other">Home</button></a>
+        <a href="pchd.html"><button class="btn critical">Critical Deck</button></a>
         <a href="dmCrits.html"><button class="btn dm">DM Critical Deck</button></a>
-		<a href="marvelIndex.html"><button class="btn dm">Marvel</button></a>
+        <a href="marvelIndex.html"><button class="btn dm">Marvel</button></a>
     </div>
-	<img src="images/parchment.png" alt="Parchment Image" class="parchment-image">
-   <div class="faildecktxt">Fail Deck </div>
-
-    <button id="drawCardButton" class="drawbutton">Draw Card</button>
-    <button class="newdeck">Reset Deck</button>
-
-    <div class="attack-type">
+ 
+	<img src="images/DnD Logo.png" alt="Parchment Banner" class="below-navbar-image">
+    <div class="faildecktxt">Fail Deck</div>
+	<div class="attack-type">
         <label>
             <input class="AttackType" type="radio" name="attackType" value="slashing" checked>
             <img src="images/slashing.png" alt="Slashing Image" class="weaponimage">
@@ -37,11 +38,15 @@
             <img src="images/magic.png" alt="Magic Image" class="weaponimage">
         </label>
     </div>
-
+	<button id="drawCardButton" class="drawbutton">Draw Card</button>
+    <div class="parchment-container">
+    <img src="images/parchment.png" alt="Parchment Image" class="parchment-image">
     <div id="deckStatus" class="DeckStatus"></div>
     <div id="cardtext" class="cardtext"></div><br>
     <div id="severity" class="severity"></div><br>
     <div id="cardsRemaining" class="cardsRemaining"></div>
+	<button class="newdeck">Reset Deck</button>
+	</div>
 
     <script>
     let originalDataArray = [
