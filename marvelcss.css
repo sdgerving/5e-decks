@@ -126,7 +126,7 @@ body {
 .section p, .section ul {
     color: #002366; /* Dark blue text */
     font-weight: bold;
-    font-size: 1.5rem; /* Match body font size */
+    font-size: 2rem; /* Match body font size */
 }
 
 /* Styling for Input Fields */
